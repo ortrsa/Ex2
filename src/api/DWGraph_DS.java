@@ -1,8 +1,10 @@
 package api;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 public class DWGraph_DS implements directed_weighted_graph {
+    private static int Ck=0;
     @Override
     public node_data getNode(int key) {
         return null;
@@ -95,15 +97,27 @@ public class DWGraph_DS implements directed_weighted_graph {
         }
     }
     private class DWNode implements node_data{
+        private HashMap<Integer,Double> Neighbors;
+        private int key;
+        private geo_location geo;
+        private String Info;
+        private int tag;
 
+public DWNode(){
+    this.key=Ck;
+    Ck++;
+    this.Neighbors=new HashMap<Integer, Double>();
+    this.Info="";
+    this.tag=-1;
+}
         @Override
         public int getKey() {
-            return 0;
+            return key;
         }
 
         @Override
         public geo_location getLocation() {
-            return null;
+            return geo;
         }
 
         @Override
@@ -113,7 +127,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
         @Override
         public double getWeight() {
-            return 0;
+            return Neighbors.;
         }
 
         @Override
