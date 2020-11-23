@@ -119,6 +119,17 @@ public class DWGraph_DS implements directed_weighted_graph {
         private geo_location geo;
         private String Info;
         private int tag;
+        private double Weight;
+
+        public DWNode(double X, double Y, double Z){
+           geo = new Geo_Location(X,Y,Z);
+            this.key=Ck;
+            Ck++;
+            this.Neighbors=new HashMap<Integer, Double>();
+            this.Info="";
+            this.tag=-1;
+            this.Weight=0;
+        }
 
 public DWNode(){
     this.key=Ck;
@@ -126,6 +137,7 @@ public DWNode(){
     this.Neighbors=new HashMap<Integer, Double>();
     this.Info="";
     this.tag=-1;
+    this.Weight=0;
 }
         @Override
         public int getKey() {
@@ -134,42 +146,74 @@ public DWNode(){
 
         @Override
         public geo_location getLocation() {
-            return geo;
+
+    return geo;
         }
 
         @Override
         public void setLocation(geo_location p) {
-
+        this.geo=new Geo_Location(p.x(),p.y(),p.z());
         }
 
         @Override
         public double getWeight() {
-            return Neighbors.;
+            return Weight;
         }
 
         @Override
         public void setWeight(double w) {
-
+        this.Weight=w;
         }
 
         @Override
         public String getInfo() {
-            return null;
+            return Info;
         }
 
         @Override
         public void setInfo(String s) {
-
+        this.Info=s;
         }
 
         @Override
         public int getTag() {
-            return 0;
+            return this.tag;
         }
 
         @Override
         public void setTag(int t) {
+        this.tag=t;
+        }
+    }
+    public class Geo_Location implements geo_location {
+        private double X;
+        private double Y;
+        private double Z;
 
+        public Geo_Location(double X, double Y , double Z){
+            this.X=X;
+            this.Y=Y;
+            this.Z=Z;
+        }
+
+        @Override
+        public double x() {
+            return X;
+        }
+
+        @Override
+        public double y() {
+            return Y;
+        }
+
+        @Override
+        public double z() {
+            return Z;
+        }
+
+        @Override
+        public double distance(geo_location g) {
+            return Math.sqrt(Math.pow(this.X-g.x(),2)+Math.pow(this.Y-g.y(),2)+Math.pow(this.Z-g.z(),2));
         }
     }
 }
