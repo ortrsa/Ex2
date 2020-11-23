@@ -3,6 +3,8 @@ package api;
 import java.util.Collection;
 
 public class DWGraph_DS implements directed_weighted_graph {
+
+   Edge edge;
     @Override
     public node_data getNode(int key) {
         return null;
@@ -59,38 +61,54 @@ public class DWGraph_DS implements directed_weighted_graph {
     }
     private class Edge implements edge_data {
 
+       private int Src;
+       private int Dest;
+       double Weight;
+       String Info ;
+       int Tag;
+
+        Edge(int src, int dest , double weight){
+           this.Src = src;
+           this.Dest = dest;
+           this.Weight = weight;
+           this.Tag = -1;
+        }
+
         @Override
         public int getSrc() {
-            return 0;
+
+            return Src;
         }
 
         @Override
         public int getDest() {
-            return 0;
+            return Dest;
         }
 
         @Override
         public double getWeight() {
-            return 0;
+            return Weight;
         }
 
         @Override
         public String getInfo() {
-            return null;
+            return Info;
         }
 
         @Override
         public void setInfo(String s) {
+            this.Info = s;
 
         }
 
         @Override
         public int getTag() {
-            return 0;
+            return Tag;
         }
 
         @Override
         public void setTag(int t) {
+            this.Tag = t;
 
         }
     }
