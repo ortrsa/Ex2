@@ -14,7 +14,7 @@ public class NodeData implements node_data  {
         Ck++;
         this.Info="";
         this.tag=-1;
-        this.Weight=0;
+        this.Weight=-1;
     }
 
     public NodeData(){

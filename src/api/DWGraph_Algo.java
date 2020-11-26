@@ -1,13 +1,14 @@
 package api;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private  directed_weighted_graph gr;
-
+    private HashMap<Integer, Double> nodeDis;
+    private HashMap<Integer, node_data> nodePar;
+    private Set<Integer> used;
+    private PriorityQueue<node_data> unused;
+    private List<node_data> path;
     @Override
     public void init(directed_weighted_graph g) {
     this.gr=g;
@@ -75,7 +76,14 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 }
     @Override
     public double shortestPathDist(int src, int dest) {
-        return 0;
+        if (gr.getNode(src) == null || gr.getNode(dest) == null) return -1;
+        used = new HashSet<>();
+        unused = new PriorityQueue<>();
+        nodeDis = new HashMap<>();
+        
+        Dijkstra(src);
+
+        return gr.getNode(dest).getTag();
     }
 
     @Override
@@ -92,4 +100,44 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     public boolean load(String file) {
         return false;
     }
+
+
+    public void Dijkstra(int src) {
+        gr.getNode(src).setWeight(0.0);
+        nodeDis.put(src, 0.0);
+        unused.add(gr.getNode(src));
+
+        while (!unused.isEmpty()) {
+
+            node_data t = unused.poll();
+            used.add(t.getKey());
+            Iterator<edge_data> Nei = gr.getE(t.getKey()).iterator();
+            while (Nei.hasNext()) {
+                edge_data tempEd = Nei.next();
+                if (!nodeDis.containsKey(tempEd.getDest())) {//check if needed
+                    nodeDis.put(tempEd.getDest(), -1.0);
+                }
+                double tempNeiDis = nodeDis.get(tempEd.getDest()); // dis from src to this dest in edge.
+                double tDis = nodeDis.get(t.getKey()); // parent dis.
+                double EdgeDis = tempEd.getWeight();
+                if ((tempNeiDis == -1.0 || tempNeiDis > (tDis + EdgeDis))) {
+                    nodeDis.put(tempEd.getDest(), tDis + EdgeDis);
+                    gr.getNode(tempEd.getDest()).setWeight(tDis + EdgeDis);//
+                    unused.add(gr.getNode(tempEd.getDest()));
+                    if (nodePar != null) {
+                        nodePar.put(tempEd.getDest(), t);
+
+                    }
+
+                }
+
+            }
+
+
+        }
+
+
+    }
+    
+    
 }
