@@ -32,6 +32,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     public edge_data getEdge(int src, int dest) {
         if(!Graph.containsKey(src)&&!Graph.containsKey(dest)){return null;}
         if(!Edges.get(src).containsKey(dest)){return null;}
+        if(!Parents.get(dest).containsKey(src)){throw new IllegalStateException("Edges and Parents should be synchronized");}
         return Edges.get(src).get(dest);
     }
 
@@ -97,22 +98,29 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     @Override
     public edge_data removeEdge(int src, int dest) {
-        return null;
+        if(!Graph.containsKey(src)){return null;}
+        if(!Edges.get(src).containsKey(dest)){return null;}
+        edge_data e = getEdge(src,dest);
+        Edges.get(src).remove(dest);
+        Parents.get(dest).remove(src);
+        EdgeSize--;
+        MC++;
+        return e;
     }
 
     @Override
     public int nodeSize() {
-        return 0;
+        return Graph.size();
     }
 
     @Override
     public int edgeSize() {
-        return 0;
+        return EdgeSize;
     }
 
     @Override
     public int getMC() {
-        return 0;
+        return MC;
     }
     ///////////////////////////////////////////////
 
