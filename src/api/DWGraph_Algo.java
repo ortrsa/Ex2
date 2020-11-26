@@ -1,7 +1,9 @@
 package api;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class DWGraph_Algo implements dw_graph_algorithms {
     private  directed_weighted_graph gr;
@@ -35,9 +37,42 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     @Override
     public boolean isConnected() {
-        return false;
+
+    Iterator<node_data> it = gr.getV().iterator();
+        if (!it.hasNext()) return true;
+    boolean flag = true;
+
+
+    Queue<node_data> Q = new LinkedList<>();
+    Iterator<node_data> it1 = gr.getV().iterator();
+        Q.add(it1.next());
+        Q.peek().setTag(0);
+
+        while (!Q.isEmpty()) {
+        node_data t3 = Q.poll();
+        Iterator<edge_data> it2 = gr.getE(t3.getKey()).iterator();
+        while (it2.hasNext()) {
+            edge_data e = it2.next();
+            if (gr.getNode(e.getDest()).getTag() < 0) {
+                gr.getNode(e.getDest()).setTag(0);
+                Q.add(gr.getNode(e.getDest()));
+
+            }
+
+        }
     }
 
+
+        while (it.hasNext()) {
+        node_data t8 = it.next();
+        if (t8.getTag() == -1) {
+            flag = false;
+        }
+        t8.setTag(-1);
+    }
+
+        return flag;
+}
     @Override
     public double shortestPathDist(int src, int dest) {
         return 0;
