@@ -1,13 +1,26 @@
 package api;
 
+import javax.swing.text.EditorKit;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 
 public class DWGraph_DS implements directed_weighted_graph {
-    private static int Ck=0;
-    private Edge edge;
     private HashMap<Integer,node_data> Graph;
-    private HashMap<Integer,HashMap<Integer,Edge>> Edges;
+    private HashMap<Integer,HashMap<Integer,edge_data>> Edges;
+    private HashMap<Integer,HashMap<Integer,edge_data>> Parents;
+    private  int MC;
+    private int EdgeSize;
+
+
+    public DWGraph_DS() {
+       Graph = new HashMap<>();
+       Edges = new HashMap<>();
+       MC=0;
+       EdgeSize=0;
+
+    }
 
     @Override
     public node_data getNode(int key) {
@@ -26,31 +39,60 @@ public class DWGraph_DS implements directed_weighted_graph {
     public void addNode(node_data n) {
     if(Graph.containsKey(n.getKey())){return;}
     Graph.put(n.getKey(),n);
+    Edges.put(n.getKey(),new HashMap<Integer, edge_data>());
+    Parents.put(n.getKey(),new HashMap<Integer, edge_data>());
+    MC++;
     }
 
     @Override
     public void connect(int src, int dest, double w) {
-    if(Graph.containsKey(src)&&Graph.containsKey(dest)&&!Edges.get(src).containsKey(dest)){
+    if(Graph.containsKey(src)&&Graph.containsKey(dest)){
         if(w<0){throw new IllegalArgumentException("weight of an edge should be positive");}
         if(src==dest){return;}
-        edge = new Edge(src,dest,w);
+        if(!Edges.get(src).containsKey(dest)){EdgeSize++;}
+        Edge edge = new Edge(src,dest,w);
         Edges.get(src).put(dest,edge);
+        Parents.get(dest).put(src,edge);
+        MC++;
     }
     }
 
     @Override
     public Collection<node_data> getV() {
-        return null;
+        return Graph.values();
     }
 
     @Override
     public Collection<edge_data> getE(int node_id) {
-        return null;
+        Collection<edge_data> Neigh = new HashSet();
+        Iterator<Integer> itr = Edges.get(node_id).keySet().iterator();
+        while(itr.hasNext()){
+            Neigh.add(getEdge(node_id, itr.next()));
+        }
+        return Neigh;
     }
 
     @Override
     public node_data removeNode(int key) {
-        return null;
+        if(!Graph.containsKey(key)){return null;}
+        Iterator<Integer>itr= Edges.get(key).keySet().iterator();
+        while(itr.hasNext()){
+            Edges.get(key).remove(itr.next());
+            EdgeSize--;
+            MC++;
+        }
+        Iterator<Integer>itr1= Parents.get(key).keySet().iterator();
+        while(itr.hasNext()){
+            Edges.get(itr1.next()).remove(key);
+            EdgeSize--;
+            MC++;
+        }
+        node_data n = getNode(key);
+        Edges.remove(key);
+        Parents.remove(key);
+        Graph.remove(key);
+        MC++;
+        return n;
     }
 
     @Override
@@ -75,164 +117,38 @@ public class DWGraph_DS implements directed_weighted_graph {
     ///////////////////////////////////////////////
 
 
-    private class Edge implements edge_data {
-
-       private int Src;
-       private int Dest;
-       double Weight;
-       String Info ;
-       int Tag;
-
-      public Edge(int src, int dest , double weight){
-           this.Src = src;
-           this.Dest = dest;
-           this.Weight = weight;
-           this.Tag = -1;
-        }
-
-        @Override
-        public int getSrc() {
-
-            return Src;
-        }
-
-        @Override
-        public int getDest() {
-            return Dest;
-        }
-
-        @Override
-        public double getWeight() {
-            return Weight;
-        }
-
-        @Override
-        public String getInfo() {
-            return Info;
-        }
-
-        @Override
-        public void setInfo(String s) {
-            this.Info = s;
-
-        }
-
-        @Override
-        public int getTag() {
-            return Tag;
-        }
-
-        @Override
-        public void setTag(int t) {
-            this.Tag = t;
-
-        }
-    }
-    ///////////////////////////////////////
 
 
 
-    private class DWNode implements node_data{
-        private HashMap<Integer,Double> Neighbors;
-        private int key;
-        private geo_location geo;
-        private String Info;
-        private int tag;
-        private double Weight;
-
-        public DWNode(double X, double Y, double Z){
-           geo = new Geo_Location(X,Y,Z);
-            this.key=Ck;
-            Ck++;
-            this.Neighbors=new HashMap<Integer, Double>();
-            this.Info="";
-            this.tag=-1;
-            this.Weight=0;
-        }
-
-public DWNode(){
-    this.key=Ck;
-    Ck++;
-    this.Neighbors=new HashMap<Integer, Double>();
-    this.Info="";
-    this.tag=-1;
-    this.Weight=0;
-}
-        @Override
-        public int getKey() {
-            return key;
-        }
-
-        @Override
-        public geo_location getLocation() {
-
-    return geo;
-        }
-
-        @Override
-        public void setLocation(geo_location p) {
-        this.geo=new Geo_Location(p.x(),p.y(),p.z());
-        }
-
-        @Override
-        public double getWeight() {
-            return Weight;
-        }
-
-        @Override
-        public void setWeight(double w) {
-        this.Weight=w;
-        }
-
-        @Override
-        public String getInfo() {
-            return Info;
-        }
-
-        @Override
-        public void setInfo(String s) {
-        this.Info=s;
-        }
-
-        @Override
-        public int getTag() {
-            return this.tag;
-        }
-
-        @Override
-        public void setTag(int t) {
-        this.tag=t;
-        }
-    }
-    public class Geo_Location implements geo_location {
-        private double X;
-        private double Y;
-        private double Z;
-
-        public Geo_Location(double X, double Y , double Z){
-            this.X=X;
-            this.Y=Y;
-            this.Z=Z;
-        }
-
-        @Override
-        public double x() {
-            return X;
-        }
-
-        @Override
-        public double y() {
-            return Y;
-        }
-
-        @Override
-        public double z() {
-            return Z;
-        }
-
-        @Override
-        public double distance(geo_location g) {
-            return Math.sqrt(Math.pow(this.X-g.x(),2)+Math.pow(this.Y-g.y(),2)+Math.pow(this.Z-g.z(),2));
-        }
-    }
+//    public class Geo_Location implements geo_location {
+//        private double X;
+//        private double Y;
+//        private double Z;
+//
+//        public Geo_Location(double X, double Y , double Z){
+//            this.X=X;
+//            this.Y=Y;
+//            this.Z=Z;
+//        }
+//
+//        @Override
+//        public double x() {
+//            return X;
+//        }
+//
+//        @Override
+//        public double y() {
+//            return Y;
+//        }
+//
+//        @Override
+//        public double z() {
+//            return Z;
+//        }
+//
+//        @Override
+//        public double distance(geo_location g) {
+//            return Math.sqrt(Math.pow(this.X-g.x(),2)+Math.pow(this.Y-g.y(),2)+Math.pow(this.Z-g.z(),2));
+//        }
+//    }
 }
