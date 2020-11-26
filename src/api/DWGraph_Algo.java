@@ -12,7 +12,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     @Override
     public directed_weighted_graph getGraph() {
-        return null;
+        return gr;
     }
 
     @Override

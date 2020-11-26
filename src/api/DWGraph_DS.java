@@ -6,24 +6,36 @@ import java.util.HashMap;
 public class DWGraph_DS implements directed_weighted_graph {
     private static int Ck=0;
     private Edge edge;
+    private HashMap<Integer,node_data> Graph;
+    private HashMap<Integer,HashMap<Integer,Edge>> Edges;
+
     @Override
     public node_data getNode(int key) {
-        return null;
+        if(!Graph.containsKey(key)){return null;}
+        return Graph.get(key);
     }
 
     @Override
     public edge_data getEdge(int src, int dest) {
-        return null;
+        if(!Graph.containsKey(src)&&!Graph.containsKey(dest)){return null;}
+        if(!Edges.get(src).containsKey(dest)){return null;}
+        return Edges.get(src).get(dest);
     }
 
     @Override
     public void addNode(node_data n) {
-
+    if(Graph.containsKey(n.getKey())){return;}
+    Graph.put(n.getKey(),n);
     }
 
     @Override
     public void connect(int src, int dest, double w) {
-
+    if(Graph.containsKey(src)&&Graph.containsKey(dest)&&!Edges.get(src).containsKey(dest)){
+        if(w<0){throw new IllegalArgumentException("weight of an edge should be positive");}
+        if(src==dest){return;}
+        edge = new Edge(src,dest,w);
+        Edges.get(src).put(dest,edge);
+    }
     }
 
     @Override
@@ -60,6 +72,9 @@ public class DWGraph_DS implements directed_weighted_graph {
     public int getMC() {
         return 0;
     }
+    ///////////////////////////////////////////////
+
+
     private class Edge implements edge_data {
 
        private int Src;
@@ -68,7 +83,7 @@ public class DWGraph_DS implements directed_weighted_graph {
        String Info ;
        int Tag;
 
-        Edge(int src, int dest , double weight){
+      public Edge(int src, int dest , double weight){
            this.Src = src;
            this.Dest = dest;
            this.Weight = weight;
@@ -113,6 +128,10 @@ public class DWGraph_DS implements directed_weighted_graph {
 
         }
     }
+    ///////////////////////////////////////
+
+
+
     private class DWNode implements node_data{
         private HashMap<Integer,Double> Neighbors;
         private int key;
