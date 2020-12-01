@@ -31,7 +31,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     @Override
     public edge_data getEdge(int src, int dest) {
-        if(!Graph.containsKey(src)&&!Graph.containsKey(dest)){return null;}
+        if(!Graph.containsKey(src)||!Graph.containsKey(dest)){return null;}
         if(!Edges.get(src).containsKey(dest)){return null;}
         if(!Parents.get(dest).containsKey(src)){throw new IllegalStateException("Edges and Parents should be synchronized");}
         return Edges.get(src).get(dest);
@@ -74,21 +74,19 @@ public class DWGraph_DS implements directed_weighted_graph {
         return Neigh;
     }
 
-    public void ReversedGraph1(){
-
-    }
 
     @Override
     public node_data removeNode(int key) {
         if(!Graph.containsKey(key)){return null;}
         Iterator<Integer>itr= Edges.get(key).keySet().iterator();
         while(itr.hasNext()){
-            Edges.get(key).remove(itr.next());
+            itr.next();
             EdgeSize--;
             MC++;
         }
+        Edges.remove(key);
         Iterator<Integer>itr1= Parents.get(key).keySet().iterator();
-        while(itr.hasNext()){
+        while(itr1.hasNext()){
             Edges.get(itr1.next()).remove(key);
             EdgeSize--;
             MC++;

@@ -11,9 +11,6 @@ class DWGraph_AlgoTest {
         for (int i = 0; i < x; i++) {
             g.addNode(new NodeData());
         }
-//        for (int i = 0; i < x-1; i++) {
-//            g.connect(i,i+1,(i*4)%3);
-//        }
         g.connect(0, 1, 0);
         g.connect(1, 2, 2);
         g.connect(2, 7, 0.5);
