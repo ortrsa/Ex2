@@ -80,7 +80,7 @@ public class DWGraph_DS implements directed_weighted_graph {
         if(!Graph.containsKey(key)){return null;}
         Iterator<Integer>itr= Edges.get(key).keySet().iterator();
         while(itr.hasNext()){
-            itr.next();
+            Parents.get(itr.next()).remove(key);
             EdgeSize--;
             MC++;
         }

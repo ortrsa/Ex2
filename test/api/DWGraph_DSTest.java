@@ -12,7 +12,8 @@ class DWGraph_DSTest {
     private directed_weighted_graph TmpGr;
 
     public directed_weighted_graph GraphCreator(int x) {
-
+        NodeData n = new NodeData();
+        n.resetCk();
         DWGraph_DS g = new DWGraph_DS();
         for (int i = 0; i < x; i++) {
             g.addNode(new NodeData());
@@ -37,7 +38,10 @@ class DWGraph_DSTest {
 
     @Test
     void getNode() {
-
+        TmpGr = GraphCreator(10);
+        assertNotNull(TmpGr.getNode(0));
+        TmpGr.removeNode(0);
+        assertNull(TmpGr.getNode(0));
     }
 
     @Test

@@ -64,5 +64,12 @@ public class Edge implements edge_data{
                 Weight == edge.getWeight();
     }
 
-
+    @Override
+    public String toString() {
+        return "Edge{" +
+                "Src=" + Src +
+                ", Dest=" + Dest +
+                ", Weight=" + Weight +
+                '}';
+    }
 }

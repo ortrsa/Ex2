@@ -17,6 +17,13 @@ public class NodeData implements node_data, Comparable<node_data>  {
         this.Weight=-1;
     }
 
+    public NodeData(node_data n){
+        this.key=n.getKey();
+        this.Info=n.getInfo();
+        this.tag=n.getTag();
+        this.Weight=n.getWeight();
+    }
+
     public NodeData(){
         this.key=Ck;
         Ck++;
@@ -75,5 +82,17 @@ public class NodeData implements node_data, Comparable<node_data>  {
         if (this.Weight < o.getWeight()) return -1;
         if (this.Weight > o.getWeight()) return 1;
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeData{" +
+                "key=" + key +
+                ", Weight=" + Weight +
+                '}';
+    }
+
+    public void resetCk(){
+        Ck=0;
     }
 }

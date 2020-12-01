@@ -24,15 +24,19 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     @Override
     public directed_weighted_graph copy() {
         directed_weighted_graph g = new DWGraph_DS();
+
+        Iterator<node_data> itradd = gr.getV().iterator();
+        while (itradd.hasNext()) {
+            g.addNode(new NodeData(itradd.next()));
+        }
+
         Iterator<node_data> itr = gr.getV().iterator();
         while (itr.hasNext()) {
-            node_data TmpNode = new NodeData();
-            TmpNode = itr.next();
-            g.addNode(TmpNode);
+            node_data TmpNode = itr.next();
             Iterator<edge_data> itr1 = gr.getE(TmpNode.getKey()).iterator();
             while (itr1.hasNext()) {
                 edge_data e = itr1.next();
-                g.connect(TmpNode.getKey(), e.getSrc(), e.getWeight());
+                g.connect(e.getSrc(), e.getDest(), e.getWeight());
             }
         }
         return g;
@@ -131,7 +135,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         nodeDis = new HashMap<>();
 
         Dijkstra(src);
-        double ShortestPath = gr.getNode(dest).getTag();
+        double ShortestPath = gr.getNode(dest).getWeight();
         reset_nodes();
         return  ShortestPath;
     }
@@ -183,8 +187,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                 if (!nodeDis.containsKey(gr.getNode(tempEd.getDest()))) {
                     nodeDis.put(gr.getNode(tempEd.getDest()), -1.0);
                 }
-                double tempNeiDis = nodeDis.get(tempEd.getDest()); // dis from src to this dest in edge.
-                double tDis = nodeDis.get(t.getKey()); // parent dis.
+                double tempNeiDis = nodeDis.get(gr.getNode(tempEd.getDest())); // dis from src to this dest in edge.
+                double tDis = nodeDis.get(t); // parent dis.
                 double EdgeDis = tempEd.getWeight();
                 if ((tempNeiDis == -1.0 || tempNeiDis > (tDis + EdgeDis))&&(!used.contains(gr.getNode(tempEd.getDest())))) {//Test
                     nodeDis.put(gr.getNode(tempEd.getDest()), tDis + EdgeDis);
