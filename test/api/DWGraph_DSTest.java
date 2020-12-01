@@ -153,7 +153,5 @@ class DWGraph_DSTest {
 
     }
 
-    @Test
-    void getMC() {
-    }
+
 }
