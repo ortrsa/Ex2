@@ -6,7 +6,7 @@ public class NodeData implements node_data, Comparable<node_data>  {
     private String Info;
     private int tag;
     private double Weight;
-    private int Ck;
+    private static int Ck;
 
     public NodeData(double X, double Y, double Z){
 //        geo = new DWGraph_DS.Geo_Location(X,Y,Z);

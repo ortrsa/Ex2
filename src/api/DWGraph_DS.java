@@ -17,6 +17,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     public DWGraph_DS() {
        Graph = new HashMap<>();
        Edges = new HashMap<>();
+       Parents = new HashMap<>();
        MC=0;
        EdgeSize=0;
 

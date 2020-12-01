@@ -43,8 +43,9 @@ class DWGraph_AlgoTest {
 
     @Test
     void copy() {
-        directed_weighted_graph t = GrapgCreator(10);
         dw_graph_algorithms ga = new DWGraph_Algo();
+        directed_weighted_graph t = GrapgCreator(10);
+
         directed_weighted_graph gb = new DWGraph_DS();
         ga.init(t);
         gb = ga.copy();
@@ -52,8 +53,10 @@ class DWGraph_AlgoTest {
         assertEquals(t.edgeSize(), gb.edgeSize(), "the graphs should have the same edge");
         assertEquals(t.nodeSize(), gb.nodeSize(), "the graphs should have the same nodes");
         assertEquals(t.getEdge(1, 2), gb.getEdge(1, 2), "the graphs should have the same edge");
+        System.out.println(t.nodeSize());
         t.removeNode(5);
-        assertNotEquals(ga.getGraph().nodeSize(), gb.nodeSize(), "the copy shouldn't change if the source graph changed");
+        System.out.println(t.nodeSize());
+        assertNotEquals(t.nodeSize(), gb.nodeSize(), "the copy shouldn't change if the source graph changed");
 
 
     }
