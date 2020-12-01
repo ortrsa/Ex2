@@ -73,6 +73,10 @@ public class DWGraph_DS implements directed_weighted_graph {
         return Neigh;
     }
 
+    public void ReversedGraph1(){
+
+    }
+
     @Override
     public node_data removeNode(int key) {
         if(!Graph.containsKey(key)){return null;}

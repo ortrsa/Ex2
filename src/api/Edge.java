@@ -1,5 +1,7 @@
 package api;
 
+import java.util.Objects;
+
 public class Edge implements edge_data{
     private int Src;
     private int Dest;
@@ -51,4 +53,16 @@ public class Edge implements edge_data{
         this.Tag = t;
 
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge edge = (Edge) o;
+        return Src == edge.getSrc() &&
+                Dest == edge.getDest() &&
+                Weight == edge.getWeight();
+    }
+
+
 }

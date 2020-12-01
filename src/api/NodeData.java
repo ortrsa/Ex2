@@ -1,6 +1,6 @@
 package api;
 
-public class NodeData implements node_data  {
+public class NodeData implements node_data, Comparable<node_data>  {
     private int key;
     private geo_location geo;
     private String Info;
@@ -22,7 +22,7 @@ public class NodeData implements node_data  {
         Ck++;
         this.Info="";
         this.tag=-1;
-        this.Weight=0;
+        this.Weight=-1;
     }
     @Override
     public int getKey() {
@@ -68,5 +68,12 @@ public class NodeData implements node_data  {
     @Override
     public void setTag(int t) {
         this.tag=t;
+    }
+
+    @Override
+    public int compareTo(node_data o) {
+        if (this.Weight < o.getWeight()) return -1;
+        if (this.Weight > o.getWeight()) return 1;
+        return 0;
     }
 }
