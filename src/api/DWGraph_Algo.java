@@ -184,7 +184,11 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
     @Override
     public boolean load(String file) {
-
+try
+{
+    GsonBuilder builder = new GsonBuilder();
+    builder.registerTypeAdapter(gr.getClass(),new GrapgJsonDeserializer());
+}
         return false;
     }
 
