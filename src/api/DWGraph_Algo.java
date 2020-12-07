@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -187,9 +188,17 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 try
 {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(gr.getClass(),new GrapgJsonDeserializer());
+    builder.registerTypeAdapter(gr.getClass(),new GraphJsonDeserializer());
+    Gson gson = builder.create();
+
+    FileReader reader = new FileReader(file);
+    gr = gson.fromJson(reader,gr.getClass());
+    return true;
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+    return false;
 }
-        return false;
+
     }
 
 

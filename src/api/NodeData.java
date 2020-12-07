@@ -1,21 +1,32 @@
 package api;
 
-public class NodeData implements node_data, Comparable<node_data>  {
+public class NodeData implements node_data, Comparable<node_data> , geo_location {
     private int key;
     private geo_location geo;
     private String Info;
     private int tag;
     private double Weight;
     private static int Ck;
+    private double X;
+    private double Y;
+    private double Z;
 
-    public NodeData(double X, double Y, double Z){
-//        geo = new DWGraph_DS.Geo_Location(X,Y,Z);
-        this.key=Ck;
-        Ck++;
-        this.Info="";
-        this.tag=-1;
-        this.Weight=-1;
+    public NodeData(double X, double Y, double Z,int key,String Info,int tag,double Weight){
+//       geo = new DWGraph_DS.Geo_Location(X,Y,Z);
+        this.key=key;
+        this.Info=Info;
+        this.tag=tag;
+        this.Weight=Weight;
+        this.X=X;
+        this.Z=Z;
+        this.Y=Y;
     }
+public NodeData(double X, double Y, double Z,int key){
+        this.key=key;
+        this.X=X;
+        this.Y=Y;
+        this.Z=Z;
+}
 
     public NodeData(node_data n){
         this.key=n.getKey();
@@ -94,5 +105,25 @@ public class NodeData implements node_data, Comparable<node_data>  {
 
     public void resetCk(){
         Ck=0;
+    }
+
+    @Override
+    public double x() {
+        return X;
+    }
+
+    @Override
+    public double y() {
+        return Y;
+    }
+
+    @Override
+    public double z() {
+        return Z;
+    }
+
+    @Override
+    public double distance(geo_location g) {
+        return 0;
     }
 }
