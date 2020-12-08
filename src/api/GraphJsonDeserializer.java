@@ -12,9 +12,9 @@ public class GraphJsonDeserializer implements JsonDeserializer<DWGraph_DS> {
         directed_weighted_graph g = new DWGraph_DS();
         JsonElement GraphCheck = jsonObject.get("Graph");
         if (GraphCheck != null) {
-            JsonObject nodesJson = jsonObject.get("Graph").getAsJsonObject();
+            JsonObject nodesJson = GraphCheck.getAsJsonObject();
             for (Map.Entry<String, JsonElement> tmpNode : nodesJson.entrySet()) {
-                String hashKey = tmpNode.getKey();
+//                String hashKey = tmpNode.getKey();
                 JsonElement jasonValueElement = tmpNode.getValue();
                 int NodeKey = jasonValueElement.getAsJsonObject().get("key").getAsInt();
                 int NodeTag = jasonValueElement.getAsJsonObject().get("tag").getAsInt();
@@ -40,10 +40,10 @@ public class GraphJsonDeserializer implements JsonDeserializer<DWGraph_DS> {
             }
             return (DWGraph_DS) g;
         } else {
-            JsonObject nodesJson = jsonObject.get("Nodes").getAsJsonObject();
-            for (Map.Entry<String, JsonElement> tmpNode : nodesJson.entrySet()) {
-                String hashKey = tmpNode.getKey();
-                JsonElement jasonValueElement = tmpNode.getValue();
+            JsonElement GraphNodes = jsonObject.get("Nodes");
+            JsonArray nodesJson = GraphNodes.getAsJsonArray();
+            for (JsonElement tmpNode : nodesJson) {
+                JsonElement jasonValueElement = tmpNode.getAsJsonObject();
                 int NodeKey = jasonValueElement.getAsJsonObject().get("id").getAsInt();
                 String NodePos = jasonValueElement.getAsJsonObject().get("pos").getAsString();
                 String[] PosArr = NodePos.split(",");
@@ -54,20 +54,15 @@ public class GraphJsonDeserializer implements JsonDeserializer<DWGraph_DS> {
                 node_data n = new NodeData(DoublePos[0], DoublePos[1], DoublePos[2], NodeKey);
                 g.addNode(n);
             }
-            JsonObject edgesJson = jsonObject.get("Edges").getAsJsonObject();
-            for (Map.Entry<String, JsonElement> tmpEdge : edgesJson.entrySet()) {
-                JsonElement EdgeValue = tmpEdge.getValue();
-                for (Map.Entry<String, JsonElement> tmpK : EdgeValue.getAsJsonObject().entrySet()) {
-                    JsonElement tmpEd = tmpK.getValue();
+            JsonArray edgesJson = jsonObject.get("Edges").getAsJsonArray();
+            for (JsonElement tmpEdge : edgesJson) {
+                    JsonElement tmpEd = tmpEdge.getAsJsonObject();
                     int EdSrc = tmpEd.getAsJsonObject().get("src").getAsInt();
                     int EdDest = tmpEd.getAsJsonObject().get("dest").getAsInt();
                     double EdWeight = tmpEd.getAsJsonObject().get("w").getAsDouble();
                     g.connect(EdSrc, EdDest, EdWeight);
                 }
             }
-
             return (DWGraph_DS) g;
         }
-
     }
-}

@@ -175,6 +175,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 
         try{
             PrintWriter pw = new PrintWriter( new File(file));
+            pw.write(json);
+            pw.close();
         }
         catch (FileNotFoundException e){
             e.printStackTrace();
@@ -188,17 +190,16 @@ public class DWGraph_Algo implements dw_graph_algorithms {
 try
 {
     GsonBuilder builder = new GsonBuilder();
-    builder.registerTypeAdapter(gr.getClass(),new GraphJsonDeserializer());
+    builder.registerTypeAdapter(directed_weighted_graph.class,new GraphJsonDeserializer());
     Gson gson = builder.create();
-
     FileReader reader = new FileReader(file);
-    gr = gson.fromJson(reader,gr.getClass());
-    return true;
+    this.init(gson.fromJson(reader,directed_weighted_graph.class));
+
 } catch (FileNotFoundException e) {
     e.printStackTrace();
     return false;
 }
-
+return true;
     }
 
 

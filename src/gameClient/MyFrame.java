@@ -49,7 +49,7 @@ public class MyFrame extends JFrame{
 		drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		
+
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
@@ -57,7 +57,7 @@ public class MyFrame extends JFrame{
 		for(int i=0;i<str.size();i++) {
 			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
 		}
-		
+
 	}
 	private void drawGraph(Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();

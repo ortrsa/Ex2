@@ -132,10 +132,19 @@ class DWGraph_AlgoTest {
 
     @Test
     void save() {
+        dw_graph_algorithms ga = new DWGraph_Algo();
+        directed_weighted_graph t = GraphCreator(10);
+        ga.init(t);
+        System.out.println(ga.getGraph());
+       System.out.println( ga.save("test.txt"));
     }
 
     @Test
     void load() {
+        dw_graph_algorithms ga = new DWGraph_Algo();
+        ga.load("A1");
+        System.out.println(ga.getGraph());
+
     }
 
 

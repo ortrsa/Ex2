@@ -1,6 +1,5 @@
 package api;
 
-import javax.swing.text.EditorKit;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -125,6 +124,18 @@ public class DWGraph_DS implements directed_weighted_graph {
     public int getMC() {
         return MC;
     }
+
+    @Override
+    public String toString() {
+        return "DWGraph_DS{" +
+                "Graph=" + Graph +
+                ", Edges=" + Edges +
+                ", Parents=" + Parents +
+                ", MC=" + MC +
+                ", EdgeSize=" + EdgeSize +
+                '}';
+    }
+
     ///////////////////////////////////////////////
 
 
