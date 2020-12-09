@@ -1,13 +1,12 @@
 package api;
 
-import java.util.Objects;
-
 public class Edge implements edge_data{
     private int Src;
     private int Dest;
-    double Weight;
-    String Info ;
-    int Tag;
+    private double Weight;
+    private String Info ;
+    private int Tag;
+
 
     public Edge(int src, int dest , double weight){
         this.Src = src;

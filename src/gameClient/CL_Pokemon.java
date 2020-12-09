@@ -3,7 +3,7 @@ import api.edge_data;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
 
-public class CL_Pokemon {
+public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	private edge_data _edge;
 	private double _value;
 	private int _type;
@@ -62,5 +62,12 @@ public class CL_Pokemon {
 
 	public void setMin_ro(int min_ro) {
 		this.min_ro = min_ro;
+	}
+
+	@Override
+	public int compareTo(CL_Pokemon Pickachu) {
+		if (this._value<Pickachu._value){return 1;}
+		if(this._value>Pickachu._value){return -1;}
+			return 0;
 	}
 }
