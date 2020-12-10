@@ -11,16 +11,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 
-public class Ex2 {
+public class Ex2 implements Runnable {
+    private static MyFrame Frame;
+    private static Arena arena;
+
     public static void main(String[] args) {
-        int i=17;
-        game_service game = Game_Server_Ex2.getServer(i);
+        Thread client = new Thread(new Ex2());
+        client.start();
+    }
+
+    @Override
+    public void run() {
+        int Level_Num = 20;
+        game_service game = Game_Server_Ex2.getServer(Level_Num);
         dw_graph_algorithms ga = new DWGraph_Algo();
 
 
@@ -35,45 +41,57 @@ public class Ex2 {
             ex.printStackTrace();
         }
         ga.load("output.txt");
-System.out.println(ga.getGraph());
-System.out.println(game);
+
 
         ArrayList<CL_Pokemon> Pokeda = Arena.json2Pokemons(game.getPokemons());
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
         PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
-        while (itr.hasNext()){
+        while (itr.hasNext()) {
             CL_Pokemon PickaTmp = itr.next();
-            PickaTmp.set_edge(Arena.GetPokEdge(ga.getGraph(),PickaTmp));
+            Arena.updateEdge(PickaTmp, ga.getGraph());
             Pokemons.add(PickaTmp);
         }
 
-        int TmpInt=0;
-        boolean flag=true;
-        while(flag){
-            if(!Pokemons.isEmpty()) {
+        /////////////////////////////////////////
+        //creating a stack for current fruit for every agent
+
+        Queue<CL_Pokemon> TmpQueue = new LinkedList<>();
+        int TmpInt = 0;
+        boolean flag = true;
+        while (flag) {
+            if (!Pokemons.isEmpty()) {
                 CL_Pokemon Pickachu = Pokemons.poll();
                 edge_data PickaEdge = Pickachu.get_edge();
+                TmpQueue.add(Pickachu);
                 flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
-                game.chooseNextEdge(TmpInt,PickaEdge.getDest());
+                if (!flag) {
+                    TmpQueue.remove(Pickachu);
+                    Pokemons.add(Pickachu);
+                }
+                game.chooseNextEdge(TmpInt, PickaEdge.getDest());
                 TmpInt++;
-            }
-                else
-                flag=game.addAgent(TmpInt);
-                TmpInt++;
+            } else
+                flag = game.addAgent(TmpInt);
+            TmpInt++;
+        }
+        System.out.println(game.getAgents());
+        List<CL_Agent> Agents = Arena.getAgents(game.getAgents(), ga.getGraph());
+        Iterator<CL_Agent> ItrAge = Agents.iterator();
+        while (ItrAge.hasNext()) {
+            CL_Agent TmpAge = ItrAge.next();
+            TmpAge.set_curr_fruit(TmpQueue.poll());
         }
 
-        List<CL_Agent> Agentss = Arena.getAgents(game.getAgents(),ga.getGraph());
-//        System.out.println(game.getAgents());
-
+        ///////////////////////////////////////////////////
+        //Starts the game
 //game.startGame();
-while (game.isRunning()){
-//    String s = game.move();
-//    System.out.println(s);
+        while (game.isRunning()) {
+            System.out.println(game.move());
 
-
-
-}
+        }
 
     }
 
 }
+
+

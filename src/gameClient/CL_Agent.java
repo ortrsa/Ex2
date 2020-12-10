@@ -20,7 +20,7 @@ public class CL_Agent {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		
+		private double Crnt_Value;
 		private double _value;
 		
 		
@@ -166,4 +166,6 @@ public class CL_Agent {
 		public void set_sg_dt(long _sg_dt) {
 			this._sg_dt = _sg_dt;
 		}
+		public double GetCrntVal(){return this.Crnt_Value;}
+		public void SetCrntVal(double val){this.Crnt_Value=val;}
 	}

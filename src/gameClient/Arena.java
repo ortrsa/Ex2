@@ -171,16 +171,16 @@ public class Arena {
 		Range2Range ans = new Range2Range(world, frame);
 		return ans;
 	}
-    public static edge_data GetPokEdge(directed_weighted_graph g, CL_Pokemon p){
-		Iterator<node_data> itr = g.getV().iterator();
-		while (itr.hasNext()){
-			Iterator<edge_data> itr1 = g.getE(itr.next().getKey()).iterator();
-			while (itr1.hasNext()) {
-				edge_data e = itr1.next();
-				if(isOnEdge(p.getLocation(), e, p.getType(), g))
-					return e;
-			}
-		}
-		return null;
-	}
+//    public static edge_data GetPokEdge(directed_weighted_graph g, CL_Pokemon p){
+//		Iterator<node_data> itr = g.getV().iterator();
+//		while (itr.hasNext()){
+//			Iterator<edge_data> itr1 = g.getE(itr.next().getKey()).iterator();
+//			while (itr1.hasNext()) {
+//				edge_data e = itr1.next();
+//				if(isOnEdge(p.getLocation(), e, p.getType(), g))
+//					return e;
+//			}
+//		}
+//		return null;
+//	}
 }
