@@ -46,10 +46,7 @@ System.out.println(game);
             PickaTmp.set_edge(Arena.GetPokEdge(ga.getGraph(),PickaTmp));
             Pokemons.add(PickaTmp);
         }
-        Iterator<CL_Pokemon>itr3 = Pokemons.iterator();
-        while (itr3.hasNext()){
-            System.out.println(itr3.next().getValue());
-        }
+
         int TmpInt=0;
         boolean flag=true;
         while(flag){

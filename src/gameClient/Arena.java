@@ -127,10 +127,7 @@ public class Arena {
 
 		boolean ans = false;
 		double dist = src.distance(dest);
-		System.out.println(dist);
 		double d1 = src.distance(p) + p.distance(dest);
-		System.out.println(d1);
-		System.out.println("//////////////////////");
 		if(dist>d1-EPS2) {ans = true;}
 		return ans;
 	}
