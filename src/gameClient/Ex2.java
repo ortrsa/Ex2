@@ -13,12 +13,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 
 
 public class Ex2 {
     public static void main(String[] args) {
-        int i=11;
+        int i=17;
         game_service game = Game_Server_Ex2.getServer(i);
         dw_graph_algorithms ga = new DWGraph_Algo();
 
@@ -45,13 +46,18 @@ System.out.println(game);
             PickaTmp.set_edge(Arena.GetPokEdge(ga.getGraph(),PickaTmp));
             Pokemons.add(PickaTmp);
         }
+        Iterator<CL_Pokemon>itr3 = Pokemons.iterator();
+        while (itr3.hasNext()){
+            System.out.println(itr3.next().getValue());
+        }
         int TmpInt=0;
         boolean flag=true;
         while(flag){
             if(!Pokemons.isEmpty()) {
-                edge_data e = Pokemons.poll().get_edge();
-                flag = game.addAgent(e.getSrc());//Sets the agents at the src of and edge that the pokemon is on
-                game.chooseNextEdge(TmpInt,e.getDest());
+                CL_Pokemon Pickachu = Pokemons.poll();
+                edge_data PickaEdge = Pickachu.get_edge();
+                flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
+                game.chooseNextEdge(TmpInt,PickaEdge.getDest());
                 TmpInt++;
             }
                 else
@@ -59,13 +65,13 @@ System.out.println(game);
                 TmpInt++;
         }
 
-//        List<CL_Agent> Agentss = Arena.getAgents(game.getAgents(),ga.getGraph());
+        List<CL_Agent> Agentss = Arena.getAgents(game.getAgents(),ga.getGraph());
 //        System.out.println(game.getAgents());
 
-game.startGame();
+//game.startGame();
 while (game.isRunning()){
-    String s = game.move();
-    System.out.println(s);
+//    String s = game.move();
+//    System.out.println(s);
 
 
 
