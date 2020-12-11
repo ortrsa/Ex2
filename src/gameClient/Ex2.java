@@ -22,7 +22,35 @@ public class Ex2 implements Runnable {
         Thread client = new Thread(new Ex2());
         client.start();
     }
+    private void init(game_service game){
+        dw_graph_algorithms ga = new DWGraph_Algo();
+        Path path = Paths.get("output.txt");
+        String contents = game.getGraph();
+        try {
+            Files.writeString(path, contents, StandardCharsets.UTF_8);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        ga.load("output.txt");
 
+        arena = new Arena();
+        arena.setGraph(ga.getGraph());
+        arena.setPokemons(Arena.json2Pokemons(game.getPokemons()));
+        Frame = new MyFrame("Catch them all");
+        Frame.setSize(1000,700);
+        Frame.update(arena);
+        Frame.show();
+
+     List<CL_Pokemon> Pokeda =  arena.getPokemons();
+//        ArrayList<CL_Pokemon> Pokeda = Arena.json2Pokemons(game.getPokemons());
+        Iterator<CL_Pokemon> itr = Pokeda.iterator();
+        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
+        while (itr.hasNext()) {
+            CL_Pokemon PickaTmp = itr.next();
+            Arena.updateEdge(PickaTmp, ga.getGraph());
+            Pokemons.add(PickaTmp);
+        }
+    }
     @Override
     public void run() {
         int Level_Num = 20;

@@ -131,17 +131,18 @@ public class Arena {
 		if(dist>d1-EPS2) {ans = true;}
 		return ans;
 	}
-	private static boolean isOnEdge(geo_location p, int s, int d, directed_weighted_graph g) {
-		geo_location src = g.getNode(s).getLocation();
-		geo_location dest = g.getNode(d).getLocation();
-		return isOnEdge(p,src,dest);
-	}
+//	private static boolean isOnEdge(geo_location p, int s, int d, directed_weighted_graph g) {
+//		geo_location src = g.getNode(s).getLocation();
+//		geo_location dest = g.getNode(d).getLocation();
+//		return isOnEdge(p,src,dest);
+//	}
 	private static boolean isOnEdge(geo_location p, edge_data e, int type, directed_weighted_graph g) {
 		int src = g.getNode(e.getSrc()).getKey();
 		int dest = g.getNode(e.getDest()).getKey();
 		if(type<0 && dest>src) {return false;}
 		if(type>0 && src>dest) {return false;}
-		return isOnEdge(p,src, dest, g);
+
+		return isOnEdge(p,g.getNode(src).getLocation(), g.getNode(dest).getLocation());
 	}
 
 	private static Range2D GraphRange(directed_weighted_graph g) {

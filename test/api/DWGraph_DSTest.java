@@ -2,8 +2,7 @@ package api;
 
 import org.junit.jupiter.api.Test;
 
-import javax.sql.rowset.spi.TransactionalWriter;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -156,6 +155,16 @@ class DWGraph_DSTest {
         assertEquals(209, TmpGr.edgeSize());
 
     }
-
+    @Test
+void Testforme(){
+        ArrayList<Integer> arr = new ArrayList<>();
+        for (int i = 0; i <5 ; i++) {
+            arr.add(i);
+        }
+        Iterator<Integer> itr = arr.iterator();
+        while(itr.hasNext()){
+            System.out.println(itr.next());
+        }
+}
 
 }
