@@ -1,11 +1,10 @@
 package gameClient;
 
-import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
+import api.*;
 import gameClient.util.Point3D;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class CL_Agent {
 		public static final double EPS = 0.0001;
@@ -20,7 +19,7 @@ public class CL_Agent {
 		private directed_weighted_graph _gg;
 		private CL_Pokemon _curr_fruit;
 		private long _sg_dt;
-		private double Crnt_Value;
+		private List<node_data> CrntPath;
 		private double _value;
 		
 		
@@ -166,6 +165,11 @@ public class CL_Agent {
 		public void set_sg_dt(long _sg_dt) {
 			this._sg_dt = _sg_dt;
 		}
-		public double GetCrntVal(){return this.Crnt_Value;}
-		public void SetCrntVal(double val){this.Crnt_Value=val;}
+	    public List<node_data> GetCrntPath(){ return this.CrntPath; }
+	    public void SetCrntPath(dw_graph_algorithms g,NodeData n){
+			this.CrntPath= g.shortestPath(this._curr_node.getKey(),n.getKey());
+		}
+		public void MoveHead(){
+			this.CrntPath.remove(0);
+		}
 	}
