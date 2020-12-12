@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * This class represents a multi Agents Arena which move on a graph - grabs Pokemons and avoid the Zombies.
@@ -26,6 +27,7 @@ public class Arena {
 	private List<String> _info;
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
+    private PriorityQueue<CL_Pokemon> PriorPoke = new PriorityQueue<>();
 
 	public Arena() {;
 		_info = new ArrayList<String>();
@@ -171,6 +173,13 @@ public class Arena {
 		Range2D world = GraphRange(g);
 		Range2Range ans = new Range2Range(world, frame);
 		return ans;
+	}
+
+	public PriorityQueue<CL_Pokemon> GetQueue(){
+		return this.PriorPoke;
+	}
+	public void SetQueue(PriorityQueue<CL_Pokemon> queue){
+		this.PriorPoke=queue;
 	}
 //    public static edge_data GetPokEdge(directed_weighted_graph g, CL_Pokemon p){
 //		Iterator<node_data> itr = g.getV().iterator();

@@ -42,11 +42,13 @@ public class Ex2 implements Runnable {
 //        ArrayList<CL_Pokemon> Pokeda = Arena.json2Pokemons(game.getPokemons());
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
         PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
+        arena.SetQueue(Pokemons);
         while (itr.hasNext()) {
             CL_Pokemon PickaTmp = itr.next();
             Arena.updateEdge(PickaTmp, ga.getGraph());
             Pokemons.add(PickaTmp);
         }
+        System.out.println(arena.GetQueue().size());
         Queue<CL_Pokemon> TmpQueue = new LinkedList<>();
         int TmpInt = 0;
         boolean flag = true;
@@ -151,6 +153,20 @@ private static void MoveAgents (game_service game, directed_weighted_graph g){
         arena.setAgents(AgeLst);
         List<CL_Pokemon> PokeList = Arena.json2Pokemons(game.getPokemons());
         arena.setPokemons(PokeList);
+        Iterator<CL_Agent> itr = AgeLst.iterator();
+        while(itr.hasNext()) {
+            CL_Agent TmpAgent = itr.next();
+        if(!AgeLst.contains(TmpAgent)){
+            TmpAgent.set_curr_fruit(null);
+        }
+        else{
+            AgeLst.remove(TmpAgent.get_curr_fruit());
+        }
+        }
+        Iterator<CL_Pokemon> itr1 = PokeList.iterator();
+        while(itr1.hasNext()){
+            arena.GetQueue().add(itr1.next());
+        }
 }
 }
 
