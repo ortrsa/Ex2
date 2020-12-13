@@ -22,6 +22,7 @@ import java.util.PriorityQueue;
 public class Arena {
 	public static final double EPS1 = 0.001, EPS2=EPS1*EPS1, EPS=EPS2;
 	private directed_weighted_graph _gg;
+	private dw_graph_algorithms ga;
 	private List<CL_Agent> _agents;
 	private List<CL_Pokemon> _pokemons;
 	private List<String> _info;
@@ -43,6 +44,7 @@ public class Arena {
 	public void setAgents(List<CL_Agent> f) {
 		this._agents = f;
 	}
+	public void setWGraph(dw_graph_algorithms g){this.ga=g;}
 	public void setGraph(directed_weighted_graph g) {this._gg =g;}//init();}
 	private void init( ) {
 		MIN=null; MAX=null;
@@ -181,16 +183,31 @@ public class Arena {
 	public void SetQueue(PriorityQueue<CL_Pokemon> queue){
 		this.PriorPoke=queue;
 	}
-//    public static edge_data GetPokEdge(directed_weighted_graph g, CL_Pokemon p){
-//		Iterator<node_data> itr = g.getV().iterator();
-//		while (itr.hasNext()){
-//			Iterator<edge_data> itr1 = g.getE(itr.next().getKey()).iterator();
-//			while (itr1.hasNext()) {
-//				edge_data e = itr1.next();
-//				if(isOnEdge(p.getLocation(), e, p.getType(), g))
-//					return e;
-//			}
-//		}
-//		return null;
-//	}
+	public boolean isFree(){
+		Iterator<CL_Agent>itr=_agents.iterator();
+		while(itr.hasNext()){
+			if(itr.next().get_curr_fruit()==null)
+				return true;
+		}
+		return false;
+	}
+	public void setFastest(CL_Pokemon Picka){
+		Iterator<CL_Agent>itr = _agents.iterator();
+		double dis =-1;
+		CL_Agent FastestAge =null;
+		while(itr.hasNext()){
+			CL_Agent TmpAgent = itr.next();
+			if(TmpAgent.get_curr_fruit()==null){
+			double dis2 = _gg.getNode(TmpAgent.get_curr_edge().getDest()).getLocation().distance(TmpAgent.getLocation());
+			double dis1 = ga.shortestPathDist(TmpAgent.get_curr_edge().getDest(),Picka.get_edge().getSrc());
+			double dis3 =dis2+dis1;
+			if(dis==-1||dis3<dis){
+				 FastestAge = TmpAgent;
+		}
+			}
+		}
+		FastestAge.set_curr_fruit(Picka);
+		FastestAge.SetCrntPath(ga,Picka.get_edge().getSrc(),Picka.get_edge().getDest());
+	}
+
 }

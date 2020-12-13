@@ -32,6 +32,7 @@ public class Ex2 implements Runnable {
 
         arena = new Arena();
         arena.setGraph(ga.getGraph());
+        arena.setWGraph(ga);
         arena.setPokemons(Arena.json2Pokemons(game.getPokemons()));
         Frame = new MyFrame("Catch them all");
         Frame.setSize(1000,700);
@@ -156,17 +157,22 @@ private static void MoveAgents (game_service game, directed_weighted_graph g){
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while(itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-        if(!AgeLst.contains(TmpAgent)){
+        if(!PokeList.contains(TmpAgent.get_curr_fruit())){
             TmpAgent.set_curr_fruit(null);
         }
         else{
-            AgeLst.remove(TmpAgent.get_curr_fruit());
+            PokeList.remove(TmpAgent.get_curr_fruit());
         }
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while(itr1.hasNext()){
+            CL_Pokemon Pickchu = itr1.next();
+            if(!arena.GetQueue().contains(Pickchu))
             arena.GetQueue().add(itr1.next());
         }
+       while(arena.isFree()&&!arena.GetQueue().isEmpty()){
+           arena.setFastest(arena.GetQueue().poll());
+       }
 }
 }
 

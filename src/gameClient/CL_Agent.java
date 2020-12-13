@@ -166,8 +166,9 @@ public class CL_Agent {
 			this._sg_dt = _sg_dt;
 		}
 	    public List<node_data> GetCrntPath(){ return this.CrntPath; }
-	    public void SetCrntPath(dw_graph_algorithms g,NodeData n){
-			this.CrntPath= g.shortestPath(this._curr_node.getKey(),n.getKey());
+	    public void SetCrntPath(dw_graph_algorithms g,int src,int dest){
+			this.CrntPath= g.shortestPath(this._curr_node.getKey(),src);
+			CrntPath.add(g.getGraph().getNode(dest));
 		}
 		public void MoveHead(){
 			this.CrntPath.remove(0);
