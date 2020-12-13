@@ -14,6 +14,7 @@ import java.util.*;
 public class Ex2 implements Runnable {
     private static MyFrame Frame;
     private static Arena arena;
+    private Queue<edge_data> edgeQueue = new LinkedList<>();
 
     public static void main(String[] args) {
         Thread client = new Thread(new Ex2());
@@ -49,27 +50,29 @@ public class Ex2 implements Runnable {
             Arena.updateEdge(PickaTmp, ga.getGraph());
             Pokemons.add(PickaTmp);
         }
-        System.out.println(arena.GetQueue().size());
+
         Queue<CL_Pokemon> TmpQueue = new LinkedList<>();
+        while(!Pokemons.isEmpty()){
+            TmpQueue.add(Pokemons.poll());
+        }
+        Pokemons.addAll(TmpQueue);
         int TmpInt = 0;
         boolean flag = true;
+
         while (flag) {
-            if (!Pokemons.isEmpty()) {
-                CL_Pokemon Pickachu = Pokemons.poll();
+            if (!TmpQueue.isEmpty()) {
+                CL_Pokemon Pickachu = TmpQueue.poll();
                 edge_data PickaEdge = Pickachu.get_edge();
-                TmpQueue.add(Pickachu);
                 flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
                 if (!flag) {
-                    TmpQueue.remove(Pickachu);
-                    Pokemons.add(Pickachu);
                     TmpInt++;
                 }
                 else {
-                    game.chooseNextEdge(TmpInt, PickaEdge.getDest());
-                    TmpInt++;
+                    edgeQueue.add(PickaEdge);
+                   TmpInt++;
                 }
             } else {
-                flag = game.addAgent(TmpInt);
+                flag = game.addAgent(TmpInt);//change
                 TmpInt++;
             }
         }
@@ -77,103 +80,88 @@ public class Ex2 implements Runnable {
     }
     @Override
     public void run() {
-        int Level_Num = 20;
+        int Level_Num = 19;
         game_service game = Game_Server_Ex2.getServer(Level_Num);
         init(game);
-//        dw_graph_algorithms ga = new DWGraph_Algo();
-//
-//
-//        //loads the graph of this level \/////////////////////////////////////////////
-//
-//
-//        Path path = Paths.get("output.txt");
-//        String contents = game.getGraph();
-//        try {
-//            Files.writeString(path, contents, StandardCharsets.UTF_8);
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//        ga.load("output.txt");
-//
-//
-//        ArrayList<CL_Pokemon> Pokeda = Arena.json2Pokemons(game.getPokemons());
-//        Iterator<CL_Pokemon> itr = Pokeda.iterator();
-//        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
-//        while (itr.hasNext()) {
-//            CL_Pokemon PickaTmp = itr.next();
-//            Arena.updateEdge(PickaTmp, ga.getGraph());
-//            Pokemons.add(PickaTmp);
-//        }
-//
-//        /////////////////////////////////////////
-//        //creating a stack for current fruit for every agent
-//
-//        Queue<CL_Pokemon> TmpQueue = new LinkedList<>();
-//        int TmpInt = 0;
-//        boolean flag = true;
-//        while (flag) {
-//            if (!Pokemons.isEmpty()) {
-//                CL_Pokemon Pickachu = Pokemons.poll();
-//                edge_data PickaEdge = Pickachu.get_edge();
-//                TmpQueue.add(Pickachu);
-//                flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
-//                if (!flag) {
-//                    TmpQueue.remove(Pickachu);
-//                    Pokemons.add(Pickachu);
-//                    TmpInt++;
-//                }
-//                else {
-//                    game.chooseNextEdge(TmpInt, PickaEdge.getDest());
-//                    TmpInt++;
-//                }
-//            } else
-//                flag = game.addAgent(TmpInt);
-//            TmpInt++;
-//        }
-//        System.out.println(game.getAgents());
-//
-//
-//        List<CL_Agent> Agents = Arena.getAgents(game.getAgents(), ga.getGraph());
-//        Iterator<CL_Agent> ItrAge = Agents.iterator();
-//        while (ItrAge.hasNext()) {
-//            CL_Agent TmpAge = ItrAge.next();
-//            TmpAge.set_curr_fruit(TmpQueue.poll());
-//        }
-
-        ///////////////////////////////////////////////////
-        //Starts the game
-//game.startGame();
+        game.startGame();
+        Frame.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
+        int ind=0;
+        long dt=100;
         while (game.isRunning()) {
-            System.out.println(game.move());
+            MoveAgents(game,arena.getGraph(),edgeQueue );
 
+            try {
+                if(ind%1==0) {Frame.repaint();}
+                Thread.sleep(dt);
+                ind++;
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
+        String res = game.toString();
 
+        System.out.println(res);
+        System.exit(0);
     }
-private static void MoveAgents (game_service game, directed_weighted_graph g){
+private static void MoveAgents (game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ){
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(),g);
         arena.setAgents(AgeLst);
+
+       Iterator<CL_Agent> Agit= AgeLst.iterator();
+        while (!edgeQ.isEmpty()){
+            Agit.next().SetEdge(edgeQ.poll());
+        }
         List<CL_Pokemon> PokeList = Arena.json2Pokemons(game.getPokemons());
         arena.setPokemons(PokeList);
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while(itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-        if(!PokeList.contains(TmpAgent.get_curr_fruit())){
-            TmpAgent.set_curr_fruit(null);
-        }
-        else{
-            PokeList.remove(TmpAgent.get_curr_fruit());
-        }
+           arena.DealWithEaten(TmpAgent );
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while(itr1.hasNext()){
             CL_Pokemon Pickchu = itr1.next();
-            if(!arena.GetQueue().contains(Pickchu))
-            arena.GetQueue().add(itr1.next());
-        }
+//            Arena.updateEdge(Pickchu,g);
+
+            if(!arena.GetQueue().contains(Pickchu)){
+            arena.GetQueue().add(Pickchu);
+            Arena.updateEdge(Pickchu,g);
+        }}
+
        while(arena.isFree()&&!arena.GetQueue().isEmpty()){
-           arena.setFastest(arena.GetQueue().poll());
+           CL_Pokemon temp = arena.GetQueue().poll();
+           arena.setFastest(temp);
        }
-}
+
+
+     Iterator<CL_Agent> iter = AgeLst.iterator();
+       while(iter.hasNext()){
+           CL_Agent TmpAgt = iter.next();
+           int id = TmpAgt.getID();
+           int dest = TmpAgt.getNextNode();
+           int src = TmpAgt.getSrcNode();
+           double v = TmpAgt.getValue();
+
+           if(dest==-1) {
+               dest = nextNode(TmpAgt,src,g);
+               game.chooseNextEdge(TmpAgt.getID(),dest);
+               System.out.println("Agent: "+id+", val: "+v+"   turned to node: "+dest);
+           }
+       }
+    }
+
+
+    public static int nextNode(CL_Agent tmpAgt, int src,directed_weighted_graph g  ) {
+
+        arena.MoveHead(tmpAgt.getID());
+        System.out.println(g.getEdge(src,arena.getPathMap().get(tmpAgt.getID()).get(0).getKey())+"hello");
+        System.out.println(src+"  src");
+        System.out.println(arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()+" dest");
+        tmpAgt.SetEdge(g.getEdge(src,arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));// check src
+        return  arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
+    }
+
 }
 
 

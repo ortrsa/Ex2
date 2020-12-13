@@ -65,6 +65,17 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 	}
 
 	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CL_Pokemon that = (CL_Pokemon) o;
+		return (that._value== _value)&&
+				_type == that._type &&
+				_pos.equals(that._pos);
+	}
+
+
+	@Override
 	public int compareTo(CL_Pokemon Pickachu) {
 		if (this._value<Pickachu._value){return 1;}
 		if(this._value>Pickachu._value){return -1;}

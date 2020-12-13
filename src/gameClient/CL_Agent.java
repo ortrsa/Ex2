@@ -21,8 +21,8 @@ public class CL_Agent {
 		private long _sg_dt;
 		private List<node_data> CrntPath;
 		private double _value;
-		
-		
+
+
 		public CL_Agent(directed_weighted_graph g, int start_node) {
 			_gg = g;
 			setMoney(0);
@@ -91,7 +91,7 @@ public class CL_Agent {
 			return this._curr_edge!=null;
 		}
 		public String toString() {
-			return toJSON();
+			return toJSON()+" fruit: "+ _curr_fruit;
 		}
 		public String toString1() {
 			String ans=""+this.getID()+","+_pos+", "+isMoving()+","+this.getValue();	
@@ -155,7 +155,9 @@ public class CL_Agent {
 			}
 			this.set_sg_dt(ddt);
 		}
-		
+		public void SetEdge(edge_data e){
+			_curr_edge=e;
+		}
 		public edge_data get_curr_edge() {
 			return this._curr_edge;
 		}
@@ -166,10 +168,14 @@ public class CL_Agent {
 			this._sg_dt = _sg_dt;
 		}
 	    public List<node_data> GetCrntPath(){ return this.CrntPath; }
-	    public void SetCrntPath(dw_graph_algorithms g,int src,int dest){
-			this.CrntPath= g.shortestPath(this._curr_node.getKey(),src);
-			CrntPath.add(g.getGraph().getNode(dest));
-		}
+	public void SetCrntPath(dw_graph_algorithms g){
+			this.CrntPath=null;
+	}
+//	    public List<node_data> SetCrntPath(dw_graph_algorithms g,int src,int dest){
+//			this.CrntPath= g.shortestPath(this._curr_edge.getDest(),src);
+//			CrntPath.add(g.getGraph().getNode(dest));
+//			return CrntPath;
+//		}
 		public void MoveHead(){
 			this.CrntPath.remove(0);
 		}
