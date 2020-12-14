@@ -41,7 +41,6 @@ public class Ex2 implements Runnable {
         Frame.show();
 
      List<CL_Pokemon> Pokeda =  arena.getPokemons();
-//        ArrayList<CL_Pokemon> Pokeda = Arena.json2Pokemons(game.getPokemons());
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
         PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
         arena.SetQueue(Pokemons);

@@ -18,25 +18,13 @@ public class MyPanel extends JPanel {
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
 
+
+
     MyPanel(Arena _ar ,gameClient.util.Range2Range _w2f ) {
         super();
         this._ar = _ar;
         this._w2f = _w2f;
-    }
-    public void update(Arena ar) {
-        this._ar = ar;
-        updateFrame();
-        this.set_ar(ar);
-    }
 
-     void updateFrame() {
-
-        Range rx = new Range(20,this.getWidth()-20);
-        Range ry = new Range(this.getHeight()-10,150);
-        Range2D frame = new Range2D(rx,ry);
-        directed_weighted_graph g = _ar.getGraph();
-        _w2f = Arena.w2f(g,frame);
-        this.set_w2f(_w2f);
     }
 
     @Override
@@ -89,11 +77,13 @@ public class MyPanel extends JPanel {
 
                     geo_location fp = this._w2f.world2frame(c);
                     g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-                    //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+
+                    	//g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 
                 }
             }
         }
+
     }
      void drawAgants(Graphics g) {
         List<CL_Agent> rs = _ar.getAgents();
@@ -126,9 +116,6 @@ public class MyPanel extends JPanel {
         //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
     }
 
-    public Arena get_ar() {
-        return _ar;
-    }
 
     public void set_ar(Arena _ar) {
         this._ar = _ar;

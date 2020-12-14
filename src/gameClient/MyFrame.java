@@ -41,7 +41,7 @@ public class MyFrame extends JFrame{
 	private void updateFrame() {
 
 		Range rx = new Range(20,this.getWidth()-20);
-		Range ry = new Range(this.getHeight()-10,150);
+		Range ry = new Range(this.getHeight()-150,150);
 		Range2D frame = new Range2D(rx,ry);
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
@@ -51,9 +51,9 @@ public class MyFrame extends JFrame{
 
 		int w = this.getWidth();
 		int h = this.getHeight();
-		g.clearRect(0, 0, w, h);
+		//g.clearRect(0, 0, w, h);
 		panel.paint(g);
-
+		System.out.println(getWidth());
 	}
 
 }
