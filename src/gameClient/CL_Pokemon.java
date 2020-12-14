@@ -77,6 +77,7 @@ public class CL_Pokemon implements Comparable<CL_Pokemon> {
 
 	@Override
 	public int compareTo(CL_Pokemon Pickachu) {
+
 		if (this._value<Pickachu._value){return 1;}
 		if(this._value>Pickachu._value){return -1;}
 			return 0;

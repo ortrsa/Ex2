@@ -272,7 +272,7 @@ public class Arena {
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
             if (!fruitMap.containsKey(TmpAgent.getID())) {
-                if(TmpAgent.getNextNode()==-1){dis3 =ga.shortestPathDist(TmpAgent.getSrcNode(),Picka.get_edge().getSrc());}
+                if(TmpAgent.getNextNode()==-1){dis3 =ga.shortestPathDist(TmpAgent.getSrcNode(),Picka.get_edge().getSrc())/TmpAgent.getSpeed();}
                else{ if (TmpAgent.getSrcNode() == Picka.get_edge().getSrc()) {
                     FastestAge = TmpAgent;
 

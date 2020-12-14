@@ -1,5 +1,9 @@
 package api;
 
+/**
+ * This class implements node_data interface and has an inner class
+ * named Geo_Location that implements geo_location interface.
+ */
 public class NodeData implements node_data, Comparable<node_data>  {
     private int key;
     private geo_location geo;
@@ -7,10 +11,18 @@ public class NodeData implements node_data, Comparable<node_data>  {
     private int tag;
     private double Weight;
     private static int Ck;
-//    private double X;
-//    private double Y;
-//    private double Z;
 
+    /**
+     * Counstructors for NodeData thats gets every constructor
+     * some of the thing required for a node and initialize the node by it.
+     * @param X
+     * @param Y
+     * @param Z
+     * @param key
+     * @param Info
+     * @param tag
+     * @param Weight
+     */
     public NodeData(double X, double Y, double Z,int key,String Info,int tag,double Weight){
         geo = new Geo_Location(X,Y,Z);
         this.key=key;
@@ -18,8 +30,9 @@ public class NodeData implements node_data, Comparable<node_data>  {
         this.tag=tag;
         this.Weight=Weight;
     }
-public NodeData(double X, double Y, double Z,int key){
-        this.key=key;
+
+    public NodeData(double X, double Y, double Z,int key){
+    this.key=key;
     this.geo = new Geo_Location(X,Y,Z);
     this.Weight=-1;
     this.Info="";
@@ -87,6 +100,12 @@ public NodeData(double X, double Y, double Z,int key){
         this.tag=t;
     }
 
+    /**
+     * Compares a node by his weight for a Priority Queue
+     * lower weights will by at the peek of the queue.
+     * @param o
+     * @return
+     */
     @Override
     public int compareTo(node_data o) {
         if (this.Weight < o.getWeight()) return -1;
@@ -102,15 +121,27 @@ public NodeData(double X, double Y, double Z,int key){
                 '}';
     }
 
+    /**
+     * Resets the counter for unique keys.
+     */
     public void resetCk(){
         Ck=0;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-public class Geo_Location implements geo_location{
+    /**
+     * Inner class that implements geo_location interface.
+     */
+    public class Geo_Location implements geo_location{
         private double X,Y,Z;
 
+        /**
+         * Contractor for Geo location that gets X Y Z nad initialize the location.
+         * @param X
+         * @param Y
+         * @param Z
+         */
         public Geo_Location(double X,double Y,double Z){
             this.X=X;
             this.Y=Y;
@@ -131,6 +162,11 @@ public class Geo_Location implements geo_location{
         return Z;
     }
 
+        /**
+         * Returns the distance of a line between two dotes at R3 world.
+         * @param g
+         * @return
+         */
     @Override
     public double distance(geo_location g) {
 double dis =Math.sqrt((Math.pow(this.X-g.x(),2)+Math.pow(this.Y-g.y(),2)+Math.pow(this.Z-g.z(),2)));

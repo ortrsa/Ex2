@@ -79,7 +79,7 @@ public class Ex2 implements Runnable {
     }
     @Override
     public void run() {
-        int Level_Num = 11;
+        int Level_Num = 1;
         game_service game = Game_Server_Ex2.getServer(Level_Num);
         init(game);
         game.startGame();

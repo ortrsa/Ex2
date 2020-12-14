@@ -1,17 +1,11 @@
 package gameClient;
 
 import api.directed_weighted_graph;
-import api.edge_data;
-import api.geo_location;
-import api.node_data;
-import gameClient.util.Point3D;
 import gameClient.util.Range;
 import gameClient.util.Range2D;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * This class represents a very simple GUI class to present a
@@ -53,7 +47,7 @@ public class MyFrame extends JFrame{
 		int h = this.getHeight();
 		//g.clearRect(0, 0, w, h);
 		panel.paint(g);
-		System.out.println(getWidth());
+
 	}
 
 }

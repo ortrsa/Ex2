@@ -9,6 +9,9 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.*;
 
+/**
+ * This class implements dw_graph_algorithms
+ */
 public class DWGraph_Algo implements dw_graph_algorithms {
     private directed_weighted_graph gr;
     private HashMap<node_data, Double> nodeDis;
@@ -28,6 +31,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return gr;
     }
 
+    /**
+     * Deep coping of a graph by creating a new empty graph Then going on the original graph
+     * HashMap of nodes by Iterator and adding to the copied graph all the nodes.
+     * Then we need to copy the edges so were going on the Graph nodes and then on every node
+     * edges then this node is the src of them and we connect the nodes as well at the copied graph.
+     * @return
+     */
     @Override
     public directed_weighted_graph copy() {
         directed_weighted_graph g = new DWGraph_DS();
@@ -49,6 +59,18 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return g;
     }
 
+    /**
+     * This function returns true if  we can get from every node to every other node.
+     * Because we are talking about a Directed graph we used a known algorithm that first take randomly node and see
+     * if we can get from this node to every other node by going from this node to his neighbors changing their tag to 0
+     * then to their neighbors and so on if there isnt a  node with tag -1 at the graph we can get from this node to every other node.
+     * now we need to check that all the nodes can get to this node so we call a function we created named ReversGr this function
+     * works similar to copy function but it swap every time it connect the src with the dest and then we have reverse graph exactly
+     * then we check at the reverse graph if the node we check at the regular graph can get to all the other nodes if so plus the fact
+     * that in the regular graph he can get to all the graph is connected!
+     *
+     * @return
+     */
     @Override
     public boolean isConnected() {
 
@@ -115,6 +137,10 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return flag;
     }
 
+    /**
+     * returns a reversed graph works like copy but change the src and dest every time we use connect.
+     * @return
+     */
     public directed_weighted_graph ReversGr(){
         directed_weighted_graph g = new DWGraph_DS();
         Iterator<node_data> itr = gr.getV().iterator();
@@ -133,7 +159,13 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return g;
     }
 
-
+    /**
+     * Returns the shortest path distance between nNode src to Node dest by applying Dijkstra algorithm that change the nodes
+     * weights to the shortest path dist from src node. then the shortest path dist from src to dest is the dest Node Weight.
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         if (gr.getNode(src) == null || gr.getNode(dest) == null) return -1;
@@ -147,6 +179,18 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         return  ShortestPath;
     }
 
+    /**
+     * return list that contains the shortest path (by weight) from src to dest.
+     * reset all nodes tag,
+     * apply 'Dijkstra' algorithm with 'src', if the 'dest' doesn't connect to 'src' return -1.
+     * the 'Dijkstra' fill the nodePer HashMap with nodes and it's parents.
+     * create pointer that point to the dest node and add it to the 'path' list,
+     * while the pointer not equal to 'src' node, pointer = 'nodePar'.
+     * reverse path list and return path.
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         if (gr.getNode(src) == null || gr.getNode(dest) == null) return null;
@@ -167,7 +211,15 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         reset_nodes();
         return path;
     }
-
+    /**
+     * Saves this graph to the given file name,
+     * this method use the serializable interface to serialize the graph
+     * and save it to file.
+     * if the file save successfully return true.
+     *
+     * @param file - the file name (may include a relative path).
+     * @return
+     */
     @Override
     public boolean save(String file) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -184,7 +236,19 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         }
         return true;
     }
-
+    /**
+     * Load can load two type of Jsons one of them is the one based on the graph we saved
+     * the second on
+     * Load this graph from the given file name,
+     * this method deserialize the graph from the given file
+     * and init the graph to this set of algorithm.
+     * if the file Load successfully return true.
+     * Load can load two type of Jsons one of them is the one based on the graph we saved
+     * the second one is the Graph we will use for the game that graph has unique Strings at the json
+     * that we used to build a special json for it so we can reat it and build a graph.
+     * @param file - file name
+     * @return
+     */
     @Override
     public boolean load(String file) {
 try
@@ -202,7 +266,27 @@ try
 return true;
     }
 
-
+    /**
+     * Dijkstra algorithm is an algorithm to fined the shortest path between nodes(by weight).
+     * this method find the shortest distance by weight from src node to all the node in the graph.
+     * this method based on 4 data structure nodeDis(HashMap), unused(PriorityQueue), used(HashSet)
+     * and nodePar(HashMap).
+     * first add the src node to unused PriorityQueue and set is weight to 0,
+     * continue while unused is not empty,
+     * iterate throw all it's neighbors and every node that not in the nodeDis HaseMap add with -1 weight,
+     * (nodeDis contains node(Key) and his distance from src(Value)),
+     * if the node weight is bigger then his father weight + the edge weight or node weight = -1
+     * replace the node weight with his father + the edge between the node and his father.
+     * (skip this step for the father node).
+     * add to unused PriorityQueue and if needed add the father to nodePar HaseMap , same for all neighbors.
+     * after that pull the next node from unused, because of the PriorityQueue every next node on the list
+     * will be with the lightest weight.
+     * after iterate throw all the graph all the nodes will be in the nodeDis Hashmap and contain in the value
+     * their min weight from src node.
+     * also the nodePar will contain every node and his father when called from shortestPath method.
+     *
+     * @param src
+     */
     public void Dijkstra(int src) {
         gr.getNode(src).setWeight(0.0);
         nodeDis.put(gr.getNode(src), 0.0);
@@ -234,6 +318,9 @@ return true;
         }
     }
 
+    /**
+     * resets Graph nodes Weight to -1 after using Dijkstra.
+     */
     private void reset_nodes() {
         Iterator<node_data> it = gr.getV().iterator();
         while (it.hasNext()) {
