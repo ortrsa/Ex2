@@ -80,7 +80,7 @@ public class Ex2 implements Runnable {
     }
     @Override
     public void run() {
-        int Level_Num = 3;
+        int Level_Num = 11;
         game_service game = Game_Server_Ex2.getServer(Level_Num);
         init(game);
         game.startGame();
@@ -107,29 +107,30 @@ public class Ex2 implements Runnable {
 private static void MoveAgents (game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ){
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(),g);
         arena.setAgents(AgeLst);
-
        Iterator<CL_Agent> Agit= AgeLst.iterator();
+       int i=0;
         while (!edgeQ.isEmpty()){
             Agit.next().SetEdge(edgeQ.poll());
         }
-        List<CL_Pokemon> PokeList = Arena.json2Pokemons(game.getPokemons());
-        arena.setPokemons(PokeList);
+        List<CL_Pokemon> PokeList1 = Arena.json2Pokemons(game.getPokemons());
+        arena.setPokemons(PokeList1);
+        arena.SetTmpPokeda();
+        List<CL_Pokemon> PokeList = arena.GetPokeda();
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while(itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
             arena.DealWithEaten(TmpAgent );
         }
-        Iterator<CL_Pokemon> itr1 = PokeList.iterator();
+
+    Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while(itr1.hasNext()){
             CL_Pokemon Pickchu = itr1.next();
-//            Arena.updateEdge(Pickchu,g);
-
+            Arena.updateEdge(Pickchu,g);
             if(!arena.GetQueue().contains(Pickchu)){
             arena.GetQueue().add(Pickchu);
-            Arena.updateEdge(Pickchu,g);
         }}
+   int x=0;
 
-        System.out.println(AgeLst.get(0).get_curr_edge());
        while(arena.isFree()&&!arena.GetQueue().isEmpty()){
            CL_Pokemon temp = arena.GetQueue().poll();
            arena.setFastest(temp);
@@ -155,10 +156,16 @@ private static void MoveAgents (game_service game, directed_weighted_graph g, Qu
 
 
     public static int nextNode(CL_Agent tmpAgt, int src,directed_weighted_graph g  ) {
-        if(arena.getPathMap().get(tmpAgt.getID()).size()>1)
         arena.MoveHead(tmpAgt.getID());
-        tmpAgt.SetEdge(g.getEdge(src,arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));// check src
-        return  arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
+        if(arena.getPathMap().get(tmpAgt.getID()).isEmpty()){
+            arena.getPathMap().remove(tmpAgt.getID());
+        arena.getFruitMap().remove(tmpAgt.getID());
+        Iterator<edge_data> itr = g.getE(tmpAgt.getSrcNode()).iterator();
+        return itr.next().getDest();}
+        else{
+            tmpAgt.SetEdge(g.getEdge(src, arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));// check src
+            return arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
+        }
     }
 
 }
