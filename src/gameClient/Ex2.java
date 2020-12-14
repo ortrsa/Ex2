@@ -80,7 +80,7 @@ public class Ex2 implements Runnable {
     }
     @Override
     public void run() {
-        int Level_Num = 19;
+        int Level_Num = 3;
         game_service game = Game_Server_Ex2.getServer(Level_Num);
         init(game);
         game.startGame();
@@ -117,7 +117,7 @@ private static void MoveAgents (game_service game, directed_weighted_graph g, Qu
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while(itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-           arena.DealWithEaten(TmpAgent );
+            arena.DealWithEaten(TmpAgent );
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while(itr1.hasNext()){
@@ -129,6 +129,7 @@ private static void MoveAgents (game_service game, directed_weighted_graph g, Qu
             Arena.updateEdge(Pickchu,g);
         }}
 
+        System.out.println(AgeLst.get(0).get_curr_edge());
        while(arena.isFree()&&!arena.GetQueue().isEmpty()){
            CL_Pokemon temp = arena.GetQueue().poll();
            arena.setFastest(temp);
@@ -139,11 +140,12 @@ private static void MoveAgents (game_service game, directed_weighted_graph g, Qu
        while(iter.hasNext()){
            CL_Agent TmpAgt = iter.next();
            int id = TmpAgt.getID();
-           int dest = TmpAgt.getNextNode();
+           int dest =  TmpAgt.getNextNode();
            int src = TmpAgt.getSrcNode();
            double v = TmpAgt.getValue();
 
            if(dest==-1) {
+
                dest = nextNode(TmpAgt,src,g);
                game.chooseNextEdge(TmpAgt.getID(),dest);
                System.out.println("Agent: "+id+", val: "+v+"   turned to node: "+dest);
@@ -153,11 +155,8 @@ private static void MoveAgents (game_service game, directed_weighted_graph g, Qu
 
 
     public static int nextNode(CL_Agent tmpAgt, int src,directed_weighted_graph g  ) {
-
+        if(arena.getPathMap().get(tmpAgt.getID()).size()>1)
         arena.MoveHead(tmpAgt.getID());
-        System.out.println(g.getEdge(src,arena.getPathMap().get(tmpAgt.getID()).get(0).getKey())+"hello");
-        System.out.println(src+"  src");
-        System.out.println(arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()+" dest");
         tmpAgt.SetEdge(g.getEdge(src,arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));// check src
         return  arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
     }

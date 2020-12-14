@@ -28,7 +28,7 @@ public class Arena {
     private PriorityQueue<CL_Pokemon> PriorPoke = new PriorityQueue<>();
     private HashMap<Integer, CL_Pokemon> fruitMap = new HashMap<>();
     private HashMap<Integer, List<node_data>> pathMap = new HashMap<>();
-    private List<node_data> CrntPath;
+//    private List<node_data> CrntPath;
 
 
     public Arena() {
@@ -260,38 +260,45 @@ public class Arena {
     public void setFastest(CL_Pokemon Picka) {
         boolean flag = true;
         Iterator<CL_Agent> itr = _agents.iterator();
+       double dis3;
         double dis = -1;
         CL_Agent FastestAge = null;
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-//if(TmpAgent.getNextNode()==-1) Ex2.nextNode(TmpAgent,TmpAgent.getSrcNode(),ga.getGraph());
             if (!fruitMap.containsKey(TmpAgent.getID())) {
-                if (TmpAgent.getSrcNode() == Picka.get_edge().getSrc()) {
+                if(TmpAgent.getNextNode()==-1){System.out.println("hay");dis3 =ga.shortestPathDist(TmpAgent.getSrcNode(),Picka.get_edge().getSrc());}
+               else{ if (TmpAgent.getSrcNode() == Picka.get_edge().getSrc()) {
                     FastestAge = TmpAgent;
 
                     break;
                 }
                 System.out.println(TmpAgent.get_curr_edge() + "  Agentedge");
+                System.out.println(TmpAgent.getValue());
                 double dis2 = _gg.getNode(TmpAgent.get_curr_edge().getDest()).getLocation().distance(TmpAgent.getLocation());
                 if (dis2 == _gg.getEdge(TmpAgent.getSrcNode(), TmpAgent.getNextNode()).getWeight())
                     dis2 = 0;
                 double dis1 = ga.shortestPathDist(TmpAgent.get_curr_edge().getDest(), Picka.get_edge().getSrc());
-                double dis3 = (dis2 + dis1) / TmpAgent.getSpeed();
+                dis3 = (dis2 + dis1) / TmpAgent.getSpeed();}
                 if (dis == -1 || dis3 < dis) {
                     FastestAge = TmpAgent;
                     dis = dis3;
                 }
             }
         }
-
+System.out.println("hay hay");
         fruitMap.put(FastestAge.getID(), Picka);
-//        System.out.println(FastestAge.SetCrntPath(ga, Picka.get_edge().getSrc(), Picka.get_edge().getDest()));
+        System.out.println("bin za lza");
+        if(FastestAge.getNextNode()==-1)
+            pathMap.put(FastestAge.getID(),SetNewPath(FastestAge,Picka.get_edge().getSrc(), Picka.get_edge().getDest()));
+        else
         pathMap.put(FastestAge.getID(), SetCrntPath(FastestAge, Picka.get_edge().getSrc(), Picka.get_edge().getDest()));
+//        System.out.println("asdasdasd");
+//System.out.println(ga.getGraph().getEdge(FastestAge.getSrcNode(),pathMap.get(FastestAge.getID()).get(0).getKey()));
 
     }
 
     public List<node_data> SetCrntPath(CL_Agent Age,int src,int dest){
-        this.CrntPath= ga.shortestPath(Age.get_curr_edge().getDest(),src);
+        List<node_data> CrntPath= ga.shortestPath(Age.get_curr_edge().getDest(),src);
         CrntPath.add(ga.getGraph().getNode(dest));
         return CrntPath;
     }
@@ -303,7 +310,6 @@ public class Arena {
             return true;
 
         } else {
-
             _pokemons.remove(fruitMap.get(TmpAgent.getID()));
             return false;
         }
@@ -315,5 +321,10 @@ public class Arena {
 
     public HashMap<Integer, CL_Pokemon> getFruitMap() {
         return fruitMap;
+    }
+    public List<node_data> SetNewPath (CL_Agent Age,int src ,int dest){
+        List<node_data> Crnt = ga.shortestPath(Age.getSrcNode(),src);
+        Crnt.add(ga.getGraph().getNode(dest));
+        return Crnt;
     }
 }
