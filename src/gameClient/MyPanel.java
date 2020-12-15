@@ -5,8 +5,6 @@ import api.edge_data;
 import api.geo_location;
 import api.node_data;
 import gameClient.util.Point3D;
-import gameClient.util.Range;
-import gameClient.util.Range2D;
 import gameClient.util.Range2Range;
 
 import javax.swing.*;
@@ -98,6 +96,7 @@ public class MyPanel extends JPanel {
 
                 geo_location fp = this._w2f.world2frame(c);
                 g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
+              //  g.drawString(""+rs.get(0).get_curr_edge().getWeight(), (int)fp.x()-r, (int)fp.y()-r);
             }
         }
     }
@@ -114,6 +113,8 @@ public class MyPanel extends JPanel {
         geo_location s0 = this._w2f.world2frame(s);
         geo_location d0 = this._w2f.world2frame(d);
         g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
+
+       // g.drawString(""+e.getWeight(), ((int)s0.x()+(int)d0.x())/2, ((int)s0.y()+(int)d0.y())/2);
     }
 
 
