@@ -26,14 +26,14 @@ public class Arena {
     private List<String> _info;
     private static Point3D MIN = new Point3D(0, 100, 0);
     private static Point3D MAX = new Point3D(0, 100, 0);
-    private PriorityQueue<CL_Pokemon> PriorPoke = new PriorityQueue<>();
+  //  private static comparator c = new comparator();
+    private PriorityQueue<CL_Pokemon> PriorPoke;// = new PriorityQueue<>(c);
     private HashMap<Integer, CL_Pokemon> fruitMap = new HashMap<>();
     private HashMap<Integer, List<node_data>> pathMap = new HashMap<>();
 //    private List<node_data> CrntPath;
 
 
     public Arena() {
-        ;
         _info = new ArrayList<String>();
     }
 
@@ -57,7 +57,7 @@ public class Arena {
 
     public void setGraph(directed_weighted_graph g) {
         this._gg = g;
-    }//init();}
+    }
 
     private void init() {
         MIN = null;
@@ -128,6 +128,7 @@ public class Arena {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+      //  c.update(ans);
         return ans;
     }
 
@@ -179,11 +180,6 @@ public class Arena {
         return ans;
     }
 
-    //	private static boolean isOnEdge(geo_location p, int s, int d, directed_weighted_graph g) {
-//		geo_location src = g.getNode(s).getLocation();
-//		geo_location dest = g.getNode(d).getLocation();
-//		return isOnEdge(p,src,dest);
-//	}
     private static boolean isOnEdge(geo_location p, edge_data e, int type, directed_weighted_graph g) {
         int src = g.getNode(e.getSrc()).getKey();
         int dest = g.getNode(e.getDest()).getKey();
@@ -249,21 +245,35 @@ public class Arena {
     public List<CL_Pokemon> GetPokeda (){
         return _pokemons2;
     }
+
     public void SetQueue(PriorityQueue<CL_Pokemon> queue) {
         this.PriorPoke = queue;
     }
 
+    /**
+     * this Function returns true only if one of the agents on agents List isn't "chasing" a pokemon at hte moment .
+     * were checking every agent if there is an agent that his id isnt on "fruitmap" HashMap if so it means hes free.
+     * @return
+     */
     public boolean isFree() {
         if (fruitMap.isEmpty()) return true;
         Iterator<CL_Agent> itr = _agents.iterator();
         while (itr.hasNext()) {
-            if (fruitMap.get(itr.next().getID()) == null) {
+            if (!fruitMap.containsKey(itr.next().getID())) {
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * this methos gets a pokemon and sets the Agent that will get the fastest to the pokemon from the free agents.
+     * we are checking all the free agents if there are on a node (their get next node returns -1) we just check their distance to the pokemon src node and divide it by agent speed.
+     * if the agent is on a middle of an edge were checking how far is the dest of that edge from him plus from that edge dest how far to the pokemon src then we divide it by his speed.
+     * then we take the minimum of all the results we got and we set the agent in the hashmap of fruitmap so well know he isnt available no more.
+     * and we check the shortest path he needs to go with SetCrntpath function and we save the List at the PthMap hashmap we the agent id.
+     * @param Picka
+     */
     public void setFastest(CL_Pokemon Picka) {
         Iterator<CL_Agent> itr = _agents.iterator();
        double dis3;
@@ -298,24 +308,40 @@ public class Arena {
 
     }
 
+    /**
+     * This function returns a list of nodes the shortest path between an agent to dest node but he has to go throw src node.
+     * we send the aggent location node and src to shortestPath function and then we add dest node and we have the shortest path we need to eat the wanted pokemon.
+     * @param Age
+     * @param src
+     * @param dest
+     * @return
+     */
     public List<node_data> SetCrntPath(CL_Agent Age,int src,int dest){
         List<node_data> CrntPath= ga.shortestPath(Age.get_curr_edge().getDest(),src);
         CrntPath.add(ga.getGraph().getNode(dest));
         return CrntPath;
     }
 
-    public boolean DealWithEaten(CL_Agent TmpAgent) {
+    /**
+     * This method gets an agent and checks if the pokemon he is chasing is on the updated list of pokemons
+     * if not it means he ate it and we need to clear the hashmaps so well know the agent is free to catch other pokemons.
+     * @param TmpAgent
+     * @return
+     */
+    public void DealWithEaten(CL_Agent TmpAgent) {
         if (!_pokemons.contains(fruitMap.get(TmpAgent.getID()))) {
             fruitMap.remove(TmpAgent.getID());
             pathMap.remove(TmpAgent.getID());
-            return true;
 
         } else {
             _pokemons2.remove(fruitMap.get(TmpAgent.getID()));
-            return false;
         }
     }
 
+    /**
+     * Removes the first node on a list.
+     * @param tmpAgt
+     */
     public void MoveHead(int tmpAgt) {
         pathMap.get(tmpAgt).remove(0);
     }
@@ -323,6 +349,14 @@ public class Arena {
     public HashMap<Integer, CL_Pokemon> getFruitMap() {
         return fruitMap;
     }
+    /**
+     * This function returns a list of nodes the shortest path between an agent to dest node but he has to go throw src node.
+     * we send the aggent location node and src to shortestPath function and then we add dest node and we have the shortest path we need to eat the wanted pokemon.
+     * @param Age
+     * @param src
+     * @param dest
+     * @return
+     */
     public List<node_data> SetNewPath (CL_Agent Age,int src ,int dest){
         List<node_data> Crnt = ga.shortestPath(Age.getSrcNode(),src);
         Crnt.add(ga.getGraph().getNode(dest));

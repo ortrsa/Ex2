@@ -17,6 +17,7 @@ public class Ex2 implements Runnable {
     private static Arena arena;
     private static int id;
     private static int level = -2;
+    private static comparator c = new comparator();
     private Queue<edge_data> edgeQueue = new LinkedList<>();
 
     public static void main(String[] args) {
@@ -24,6 +25,14 @@ public class Ex2 implements Runnable {
         client.start();
     }
 
+    /**
+     * Sets the arena for the game by loading the graph, creating new Arena and set the Pokemons and grpah to it.
+     * Sets the Frame thaht we see the graph in by the width and height we want and update the arena in it.
+     * Creating a priority queue(by values and distance algorithm)  for the Pokemons and updating their edge by their location and type.
+     * Then we are adding agents to the graph to the Pokemons edge srcs and if there more Agents then Pokemons were putting the spare
+     * Agents randomly on the graph nodes. were also saving a tmp queue for the agents edges in the first run of "MoveAgent" function.
+     * @param game
+     */
     private void init(game_service game) {
         dw_graph_algorithms ga = new DWGraph_Algo();
         Path path = Paths.get("output.txt");
@@ -34,6 +43,7 @@ public class Ex2 implements Runnable {
             ex.printStackTrace();
         }
         ga.load("output.txt");
+
 
         arena = new Arena();
         arena.setGraph(ga.getGraph());
@@ -46,7 +56,9 @@ public class Ex2 implements Runnable {
 
         List<CL_Pokemon> Pokeda = arena.getPokemons();
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
-        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();//puts Pokemons in priority queue by their value
+
+        c.updategg(ga.getGraph());
+        PriorityQueue<CL_Pokemon> Pokemons= new PriorityQueue<>(c);//puts Pokemons in priority queue by their value
         arena.SetQueue(Pokemons);
         while (itr.hasNext()) {
             CL_Pokemon PickaTmp = itr.next();
@@ -59,7 +71,7 @@ public class Ex2 implements Runnable {
             TmpQueue.add(Pokemons.poll());
         }
         Pokemons.addAll(TmpQueue);
-        int TmpInt = 0;
+        int TmpInt = ga.getGraph().nodeSize();
         boolean flag = true;
 
         while (flag) {
@@ -67,14 +79,11 @@ public class Ex2 implements Runnable {
                 CL_Pokemon Pickachu = TmpQueue.poll();
                 edge_data PickaEdge = Pickachu.get_edge();
                 flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
-                if (!flag) {
-                    TmpInt++;
-                } else {
+                if (flag) {
                     edgeQueue.add(PickaEdge);
-                    TmpInt++;
                 }
             } else {
-                flag = game.addAgent(TmpInt);//change
+                flag = game.addAgent((int) (Math.random()*TmpInt));
                 TmpInt++;
             }
         }
@@ -96,13 +105,14 @@ System.out.println(" ");
             }
 
 
-        game_service game = Game_Server_Ex2.getServer(level);
-        //game.login(id);
+
+        game_service game = Game_Server_Ex2.getServer(5);
+      //  game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
         int ind = 0;
-        long dt = 100;
+        long dt = 101;
         while (game.isRunning()) {
             MoveAgents(game, arena.getGraph(), edgeQueue);
 
@@ -122,11 +132,25 @@ System.out.println(" ");
         System.exit(0);
     }
 
+    /**
+     * This function is the main of the game here we decide how to move the agents on the graph.
+     * every time were in this function first of all we use Arena functions to get the updated Agents and Pokemons Lists while moving the agents to their next node.
+     * Then were checking if there are Pokemons that were targeted by agents before and no longer at the updtaed list of pokemons
+     * if so it means we ate them and we need to "free" the agent so he can chase other Pokemons we do it in function "DealWithEaten"
+     * then we check if there are Pokemons that arent targeted and not in the priority queue if so we add them to the priority queue.
+     * then we check if there is free agent (IsFree function) and if there are Pokemons that arent been Targeted yet (if the queue isnt empty)
+     * if so we poll the most valued pokemons and send it to setFastest function which choose the closer agent from the once who are free
+     * and make him move towards the pokemon direction. then were checking if the agents are moving or they are on a node by their dest
+     * if the dest is -1 we need to set their next node towards the pokemon their chasing by next node function that well explain below.
+     * @param game
+     * @param g
+     * @param edgeQ
+     */
     private static void MoveAgents(game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ) {
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(), g);
         arena.setAgents(AgeLst);
+        c.update(AgeLst);
         Iterator<CL_Agent> Agit = AgeLst.iterator();
-        int i = 0;
         while (!edgeQ.isEmpty()) {
             Agit.next().SetEdge(edgeQ.poll());
         }
@@ -139,17 +163,15 @@ System.out.println(" ");
             CL_Agent TmpAgent = itr.next();
             arena.DealWithEaten(TmpAgent);
         }
-
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while (itr1.hasNext()) {
             CL_Pokemon Pickchu = itr1.next();
             Arena.updateEdge(Pickchu, g);
             if (!arena.GetQueue().contains(Pickchu)) {
+
                 arena.GetQueue().add(Pickchu);
             }
         }
-        int x = 0;
-
         while (arena.isFree() && !arena.GetQueue().isEmpty()) {
             CL_Pokemon temp = arena.GetQueue().poll();
             arena.setFastest(temp);
@@ -173,7 +195,17 @@ System.out.println(" ");
         }
     }
 
-
+    /**
+     * this method gets an agent and his current node key and needs to return where should he continue next to get to his pokemon as fast as possible.
+     * we saved an hash map with key of integer (for the agents id's) and value of List<node_data>(the shortest path he needs to go to get to the wanted pokemon).
+     * if the agent got to this function it means he finished his last edge so i can remove it from the list by MoveHead function which removes the first node at the list.
+     * then i set the agent edge to src (the node his on right now) and the first node on the list (the node hes going to go ) then i return the dest of this edge key
+     * and that is the node he is going.
+     * @param tmpAgt
+     * @param src
+     * @param g
+     * @return
+     */
     public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g) {
         arena.MoveHead(tmpAgt.getID());
         if (arena.getPathMap().get(tmpAgt.getID()).isEmpty()) {
@@ -187,15 +219,18 @@ System.out.println(" ");
         }
     }
 
+    /**
+     * update id and level from login_page.
+     * @param level
+     * @param id
+     */
 
     public static void iupdate(int level, int id) {
         Ex2.id = id;
         Ex2.level = level;
     }
 
-    public int getLevel() {
-        return level;
-    }
+
 }
 
 

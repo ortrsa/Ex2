@@ -25,7 +25,7 @@ public class MyFrame extends JFrame {
     MyFrame(String a) {
         super(a);
         int _ind = 0;
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.panel = new MyPanel(_ar, _w2f);
         this.add(panel);
     }
