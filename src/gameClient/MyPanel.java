@@ -77,8 +77,9 @@ public class MyPanel extends JPanel {
 
                     geo_location fp = this._w2f.world2frame(c);
                     g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
+                    g.setColor(Color.black);
+                    g.drawString(""+f.getValue(), (int)fp.x(), (int)fp.y()-4*r);
 
-                    	//g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 
                 }
             }
@@ -113,7 +114,6 @@ public class MyPanel extends JPanel {
         geo_location s0 = this._w2f.world2frame(s);
         geo_location d0 = this._w2f.world2frame(d);
         g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
-        //	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
     }
 
 
