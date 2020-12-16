@@ -60,9 +60,6 @@ public class comparator implements Comparator<CL_Pokemon> {
             }
             return 0;
         }else {
-            System.out.println("o1=  "+o1 );
-            System.out.println("o2=  "+o2 );
-            System.out.println("-------------");
             double o1min = isFaster(o1);
             double o2min = isFaster(o2);
             double o1val = o1.getValue() / o1min ;

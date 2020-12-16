@@ -106,13 +106,13 @@ System.out.println(" ");
 
 
 
-        game_service game = Game_Server_Ex2.getServer(5);
+        game_service game = Game_Server_Ex2.getServer(0);
       //  game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
         int ind = 0;
-        long dt = 101;
+        long dt = 100;
         while (game.isRunning()) {
             MoveAgents(game, arena.getGraph(), edgeQueue);
 
