@@ -23,6 +23,7 @@ public class Arena {
     private List<CL_Agent> _agents;
     private List<CL_Pokemon> _pokemons;
     private List<CL_Pokemon> _pokemons2;
+    private List<CL_Pokemon> BeingChased = new ArrayList<>();
     private List<String> _info;
     private static Point3D MIN = new Point3D(0, 100, 0);
     private static Point3D MAX = new Point3D(0, 100, 0);
@@ -308,6 +309,36 @@ public class Arena {
 
     }
 
+
+     public void SetPokeCatch(CL_Agent Ash){
+        Iterator<CL_Pokemon>itr = _pokemons.iterator();
+        double dis =-1;
+        double dis1,dis2;
+        double MinDis=-1;
+        CL_Pokemon Squirtel=null;
+        while(itr.hasNext()){
+            CL_Pokemon PickaTmp = itr.next();
+        if(!BeingChased.contains(PickaTmp)){
+            if(Ash.getNextNode()==-1){
+                dis = ga.shortestPathDist(Ash.getSrcNode(),PickaTmp.get_edge().getSrc());
+            }
+            else{
+                dis1 = ga.getGraph().getNode(Ash.get_curr_edge().getDest()).getLocation().distance(Ash.getLocation());
+                dis2 = ga.shortestPathDist(Ash.get_curr_edge().getDest(),PickaTmp.get_edge().getSrc());
+                dis =dis1+dis2;
+            }
+            if(MinDis==-1||dis<MinDis){
+                MinDis=dis;
+                Squirtel = PickaTmp;
+            }
+         }}
+        fruitMap.put(Ash.getID(),Squirtel);
+        BeingChased.add(Squirtel);
+         if(Ash.getNextNode()==-1)
+             pathMap.put(Ash.getID(),SetNewPath(Ash,Squirtel.get_edge().getSrc(), Squirtel.get_edge().getDest()));
+         else
+             pathMap.put(Ash.getID(), SetCrntPath(Ash, Squirtel.get_edge().getSrc(), Squirtel.get_edge().getDest()));     }
+
     /**
      * This function returns a list of nodes the shortest path between an agent to dest node but he has to go throw src node.
      * we send the aggent location node and src to shortestPath function and then we add dest node and we have the shortest path we need to eat the wanted pokemon.
@@ -338,6 +369,18 @@ public class Arena {
         }
     }
 
+    public void DealWithEaten2(CL_Agent TmpAgent) {
+        if (!_pokemons.contains(fruitMap.get(TmpAgent.getID()))) {
+            BeingChased.remove(fruitMap.get(TmpAgent.getID()));
+            fruitMap.remove(TmpAgent.getID());
+            pathMap.remove(TmpAgent.getID());
+
+        }
+//        else {
+//            _pokemons2.remove(fruitMap.get(TmpAgent.getID()));
+//        }
+    }
+
     /**
      * Removes the first node on a list.
      * @param tmpAgt
@@ -362,5 +405,13 @@ public class Arena {
         Crnt.add(ga.getGraph().getNode(dest));
         return Crnt;
     }
-
+public List<CL_Pokemon> GetBeingChased(){
+        return BeingChased;
+}
+    public boolean hasPoke() {
+        if(_pokemons.size()==BeingChased.size()){
+            return false;
+        }
+        return true;
+    }
 }

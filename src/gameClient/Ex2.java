@@ -106,7 +106,7 @@ System.out.println(" ");
 
 
 
-        game_service game = Game_Server_Ex2.getServer(0);
+        game_service game = Game_Server_Ex2.getServer(23);
       //  game.login(id);
         init(game);
         game.startGame();
@@ -149,33 +149,42 @@ System.out.println(" ");
     private static void MoveAgents(game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ) {
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(), g);
         arena.setAgents(AgeLst);
-        c.update(AgeLst);
+//        c.update(AgeLst);
         Iterator<CL_Agent> Agit = AgeLst.iterator();
         while (!edgeQ.isEmpty()) {
             Agit.next().SetEdge(edgeQ.poll());
         }
         List<CL_Pokemon> PokeList1 = Arena.json2Pokemons(game.getPokemons());
         arena.setPokemons(PokeList1);
+
         arena.SetTmpPokeda();
         List<CL_Pokemon> PokeList = arena.GetPokeda();
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-            arena.DealWithEaten(TmpAgent);
+          //  arena.DealWithEaten(TmpAgent);
+            arena.DealWithEaten2(TmpAgent);//
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while (itr1.hasNext()) {
             CL_Pokemon Pickchu = itr1.next();
             Arena.updateEdge(Pickchu, g);
-            if (!arena.GetQueue().contains(Pickchu)) {
-
-                arena.GetQueue().add(Pickchu);
+//            if (!arena.GetQueue().contains(Pickchu)) {
+//
+//                arena.GetQueue().add(Pickchu);
+//            }
+        }
+        Iterator<CL_Agent>itr2 = AgeLst.iterator();//
+        while(arena.isFree()&&arena.hasPoke()){//
+            CL_Agent Broke = itr2.next();//
+            if(!arena.getFruitMap().containsKey(Broke.getID())){//
+                arena.SetPokeCatch(Broke);//
             }
         }
-        while (arena.isFree() && !arena.GetQueue().isEmpty()) {
-            CL_Pokemon temp = arena.GetQueue().poll();
-            arena.setFastest(temp);
-        }
+//        while (arena.isFree() && !arena.GetQueue().isEmpty()) {
+//            CL_Pokemon temp = arena.GetQueue().poll();
+//            arena.setFastest(temp);
+//        }
 
 
         Iterator<CL_Agent> iter = AgeLst.iterator();
@@ -209,8 +218,11 @@ System.out.println(" ");
     public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g) {
         arena.MoveHead(tmpAgt.getID());
         if (arena.getPathMap().get(tmpAgt.getID()).isEmpty()) {
+            tmpAgt.setSpeed(tmpAgt.getSpeed()-2);
+            arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));
             arena.getPathMap().remove(tmpAgt.getID());
             arena.getFruitMap().remove(tmpAgt.getID());
+            arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));//
             Iterator<edge_data> itr = g.getE(tmpAgt.getSrcNode()).iterator();
             return itr.next().getDest();
         } else {
