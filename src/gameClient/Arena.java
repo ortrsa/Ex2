@@ -414,4 +414,11 @@ public List<CL_Pokemon> GetBeingChased(){
         }
         return true;
     }
+    public edge_data GetNextEdge (CL_Agent Ash) {
+        if (pathMap.get(Ash.getID()).size()>1) {
+            return ga.getGraph().getEdge(pathMap.get(Ash.getID()).get(0).getKey(), pathMap.get(Ash.getID()).get(1).getKey());
+        }
+        return null;
+    }
+
 }

@@ -18,8 +18,12 @@ public class Ex2 implements Runnable {
     private static int id;
     private static int level = -2;
     private static comparator c = new comparator();
+    private static int counter;
     private Queue<edge_data> edgeQueue = new LinkedList<>();
     private String[] arg;
+    private static long dt;
+
+
 
     public static void main(String[] args) {
 
@@ -37,6 +41,7 @@ public class Ex2 implements Runnable {
      * Creating a priority queue(by values and distance algorithm)  for the Pokemons and updating their edge by their location and type.
      * Then we are adding agents to the graph to the Pokemons edge srcs and if there more Agents then Pokemons were putting the spare
      * Agents randomly on the graph nodes. were also saving a tmp queue for the agents edges in the first run of "MoveAgent" function.
+     *
      * @param game
      */
     private void init(game_service game) {
@@ -64,7 +69,7 @@ public class Ex2 implements Runnable {
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
 
         c.updategg(ga.getGraph());
-        PriorityQueue<CL_Pokemon> Pokemons= new PriorityQueue<>(c);//puts Pokemons in priority queue by their value
+        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>(c);//puts Pokemons in priority queue by their value
         arena.SetQueue(Pokemons);
         while (itr.hasNext()) {
             CL_Pokemon PickaTmp = itr.next();
@@ -89,7 +94,7 @@ public class Ex2 implements Runnable {
                     edgeQueue.add(PickaEdge);
                 }
             } else {
-                flag = game.addAgent((int) (Math.random()*TmpInt));
+                flag = game.addAgent((int) (Math.random() * TmpInt));
                 TmpInt++;
             }
         }
@@ -100,33 +105,34 @@ public class Ex2 implements Runnable {
     @Override
     public void run() {
 
-    if(arg.length!= 2) {
-        login = new login_page();
-        login.register(this);
-        login.show();
+        if (arg.length != 2) {
+            login = new login_page();
+            login.register(this);
+            login.show();
 
-int i =1;
-        while (level == -2) {
-            while (i % 999999999 == 0) {
-                i=1;
-                System.out.print(".");
+            int i = 1;
+            while (level == -2) {
+                while (i % 999999999 == 0) {
+                    i = 1;
+                    System.out.print(".");
+                }
+                i++;
+
             }
-            i++;
-
+        } else {
+            level = Integer.parseInt(arg[1]); /// need try catch
+            id = Integer.parseInt(arg[0]);
         }
-    }else {
-        level = Integer.parseInt(arg[1]); /// need try catch
-        id = Integer.parseInt(arg[0]);
-    }
 
 
         game_service game = Game_Server_Ex2.getServer(level);
-      //  game.login(id);
+        //  game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
         int ind = 0;
-        long dt = 100;
+//        long dt = 87;
+        dt = 100;
         while (game.isRunning()) {
             MoveAgents(game, arena.getGraph(), edgeQueue);
 
@@ -156,6 +162,7 @@ int i =1;
      * if so we poll the most valued pokemons and send it to setFastest function which choose the closer agent from the once who are free
      * and make him move towards the pokemon direction. then were checking if the agents are moving or they are on a node by their dest
      * if the dest is -1 we need to set their next node towards the pokemon their chasing by next node function that well explain below.
+     *
      * @param game
      * @param g
      * @param edgeQ
@@ -176,7 +183,7 @@ int i =1;
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-          //  arena.DealWithEaten(TmpAgent);
+            //  arena.DealWithEaten(TmpAgent);
             arena.DealWithEaten2(TmpAgent);//
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
@@ -188,10 +195,10 @@ int i =1;
 //                arena.GetQueue().add(Pickchu);
 //            }
         }
-        Iterator<CL_Agent>itr2 = AgeLst.iterator();//
-        while(arena.isFree()&&arena.hasPoke()){//
+        Iterator<CL_Agent> itr2 = AgeLst.iterator();//
+        while (arena.isFree() && arena.hasPoke()) {//
             CL_Agent Broke = itr2.next();//
-            if(!arena.getFruitMap().containsKey(Broke.getID())){//
+            if (!arena.getFruitMap().containsKey(Broke.getID())) {//
                 arena.SetPokeCatch(Broke);//
             }
         }
@@ -199,7 +206,12 @@ int i =1;
 //            CL_Pokemon temp = arena.GetQueue().poll();
 //            arena.setFastest(temp);
 //        }
-
+       double maxi = 0;
+        for (CL_Agent max: AgeLst) {
+            if(max.getSpeed()>maxi){
+                maxi=max.getSpeed();
+            }
+        }
 
         Iterator<CL_Agent> iter = AgeLst.iterator();
         while (iter.hasNext()) {
@@ -211,7 +223,7 @@ int i =1;
 
             if (dest == -1) {
 
-                dest = nextNode(TmpAgt, src, g);
+                dest = nextNode(TmpAgt, src, g,maxi);
                 game.chooseNextEdge(TmpAgt.getID(), dest);
                 System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
             }
@@ -224,15 +236,18 @@ int i =1;
      * if the agent got to this function it means he finished his last edge so i can remove it from the list by MoveHead function which removes the first node at the list.
      * then i set the agent edge to src (the node his on right now) and the first node on the list (the node hes going to go ) then i return the dest of this edge key
      * and that is the node he is going.
+     *
      * @param tmpAgt
      * @param src
      * @param g
      * @return
      */
-    public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g) {
+    public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g,double max) {
         arena.MoveHead(tmpAgt.getID());
+        System.out.println("this is the DT : " + dt);
+        System.out.println(tmpAgt.getSpeed());
         if (arena.getPathMap().get(tmpAgt.getID()).isEmpty()) {
-            tmpAgt.setSpeed(tmpAgt.getSpeed()-2);
+            tmpAgt.setSpeed(tmpAgt.getSpeed() - 2);
             arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));
             arena.getPathMap().remove(tmpAgt.getID());
             arena.getFruitMap().remove(tmpAgt.getID());
@@ -241,12 +256,37 @@ int i =1;
             return itr.next().getDest();
         } else {
             tmpAgt.SetEdge(g.getEdge(src, arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));
+
+            if (max < 2){
+              dt=180;
+          }
+
+            else if (max < 4) {
+                dt = 120;
+            }
+            else if(max<5) dt=100;
+            else {dt=83;}
+//                if (arena.GetNextEdge(tmpAgt) != null && arena.GetNextEdge(tmpAgt).getWeight() < 1.2) {
+//
+//
+//                System.out.println("helooooooooooooo");
+//                dt = 80;
+//                counter = 0;
+//            } else {
+//                if(counter==2)
+//                 dt = 90;
+//                counter++;
+//            }
+
+
             return arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
         }
+
     }
 
     /**
      * update id and level from login_page.
+     *
      * @param level
      * @param id
      */
