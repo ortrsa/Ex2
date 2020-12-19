@@ -106,7 +106,7 @@ System.out.println(" ");
 
 
 
-        game_service game = Game_Server_Ex2.getServer(23);
+        game_service game = Game_Server_Ex2.getServer(level);
       //  game.login(id);
         init(game);
         game.startGame();

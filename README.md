@@ -7,7 +7,7 @@ in this project we will run the "pokemon game".
 The game: the game server will place agent and pokemon with different values on directional weighted graph.  
 Every edge have different weight and effect the agent speed.
 the goal: the agent's will need to eat as mach point as possible by eating many Pokemon's with high value.  
-The main goal of this project is to program the most effective way to get as many points as possible with few calls to server.  .  
+The main goal of this project is to program the most effective way to get as many points as possible with few calls to server.  
 
 This repo contains the following files:  
 - .gitignore
