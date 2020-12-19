@@ -14,7 +14,6 @@ import java.awt.*;
  * code and not to take it "as is".
  */
 public class MyFrame extends JFrame {
-    private int _ind;
     private Arena _ar;
     private gameClient.util.Range2Range _w2f;
     private MyPanel panel;
@@ -24,7 +23,6 @@ public class MyFrame extends JFrame {
 
     MyFrame(String a) {
         super(a);
-        int _ind = 0;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.panel = new MyPanel(_ar, _w2f);
         this.add(panel);
@@ -52,9 +50,6 @@ public class MyFrame extends JFrame {
         if (w!=getWidth()||h!=getHeight()) {
             updateFrame();
         }
-        int w = this.getWidth();
-        int h = this.getHeight();
-        //g.clearRect(0, 0, w, h);
         panel.paint(g);
     }
 

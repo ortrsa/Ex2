@@ -19,10 +19,16 @@ public class Ex2 implements Runnable {
     private static int level = -2;
     private static comparator c = new comparator();
     private Queue<edge_data> edgeQueue = new LinkedList<>();
+    private String[] arg;
 
     public static void main(String[] args) {
-        Thread client = new Thread(new Ex2());
+
+        Thread client = new Thread(new Ex2(args));
         client.start();
+    }
+
+    public Ex2(String[] arg) {
+        this.arg = arg;
     }
 
     /**
@@ -94,16 +100,24 @@ public class Ex2 implements Runnable {
     @Override
     public void run() {
 
+    if(arg.length!= 2) {
+        login = new login_page();
+        login.register(this);
+        login.show();
 
-            login = new login_page();
-            login.register(this);
-            login.show();
-
-
-            while (level == -2) {
-System.out.println(" ");
+int i =1;
+        while (level == -2) {
+            while (i % 999999999 == 0) {
+                i=1;
+                System.out.print(".");
             }
+            i++;
 
+        }
+    }else {
+        level = Integer.parseInt(arg[1]); /// need try catch
+        id = Integer.parseInt(arg[0]);
+    }
 
 
         game_service game = Game_Server_Ex2.getServer(level);

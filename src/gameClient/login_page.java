@@ -55,11 +55,11 @@ public class login_page extends JFrame implements ActionListener {
         String id = tf_id.getText();
         String level = tf_level.getText();
        try {
-           System.out.println(Integer.parseInt(id));
          //  if(Integer.parseInt(id) <100000000||Integer.parseInt(id)>999999999) throw new IllegalArgumentException();
-           if(Integer.parseInt(level) <0||Integer.parseInt(level)>23) throw new IllegalArgumentException();
+           int lv = Integer.parseInt(level);
+           int idnum = Integer.parseInt(id);
+           Ex2.iupdate(lv,idnum);
            setVisible(false);
-           Ex2.iupdate(Integer.parseInt(level),Integer.parseInt(id));
 
        }
         catch (Exception ex){
