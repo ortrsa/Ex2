@@ -58,6 +58,8 @@ then there are 2 option that you can run it:
 - [Directed_graph - Wikipedia](https://en.wikipedia.org/wiki/Directed_graph)
 - [Game result - Wiki page](https://github.com/ortrsa/Ex2/wiki/result)
 - [Ex1](https://github.com/ortrsa/ex1)
+- [Arena Functions - Wiki](https://github.com/ortrsa/Ex2/wiki/Arena-Functions)
+- [Ex2 Functions - Wiki](https://github.com/ortrsa/Ex2/wiki/Ex2)
 
 # About:
 This project is part of oop course of Ariel university and made for study purposes.  
