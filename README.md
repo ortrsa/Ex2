@@ -4,24 +4,37 @@
 This project is an implementation of data structures and algorithms on directional weighted graph in Java.    
 It is direct continuation of Ex1, you can find more abut Ex1 in [Here](https://github.com/ortrsa/ex1).  
 in this project we will run the "pokemon game".  
-The game: the game server will place agent and pokemon with different values on directional weighted graph.  
-Every edge have different weight and effect the agent speed.
-the goal: the agent's will need to eat as mach point as possible by eating many Pokemon's with high value.  
+### The game:  
+the game server will place agent and pokemon with different values on directional weighted graph.  
+Every edge have different weight and affects the agent speed.
+### the goal:
+the agent's will need to eat as many points as possible by eating many Pokemon's with high value.  
 The main goal of this project is to program the most effective way to get as many points as possible with few calls to server.  
 
-This repo contains the following files: wiki page...
+This repo contains the following files: [WikiPage](https://github.com/ortrsa/Ex2/wiki/Files). 
   
     
 
 # How it's work..
-This algorithm calculates the shortest path(by weight) from a starting node to all other nodes in a graph.
-This implementation also contains a method that can return the shortest path to a specified node.
+This algorithm calculates the shortest path from each agent to the closest free pokemon.
 I found that the easiest way to understand the implementation of this algorithm is with a flow chart:
 
-![alt text](https://i.ibb.co/DV2Mscd/2020-12-15-20-53-12.png)
+![alt text](https://i.ibb.co/M5WHNcV/2020-12-20-17-07-53.png)
 
-To understand the algorithm in depth I recommend watching this video: [Dijkstra's Algorithm - Computerphile](https://www.youtube.com/watch?v=GazC3A4OQTE&feature=youtu.be) 
-
+- **Run():** run the thread.
+- **Init():** before each level load the relevant graph, open GUI class, first placed of Pokemon's and place  
+ agents closest as possible to Pokemon's with high value.
+- **Is running:** if the time ends stop the game and return the result, else keep moving agents.
+- **Move agent():** this method responsible for the course of the game, updates Pokemon's and agent location continuously,  
+and call to all the following function...
+- **Deal With Eaten():** After getting updated information abput the Pokemons we have we check if the pokemons that the agents 
+are chasing now are in the updated list of Pokemons and if not we know the agents ate them so we need to clear the agents
+so they'll be free to chase other Pokemons and we need to remove the pokemons from the being chaased list as well so well know weren't chasing them any more.  
+- **Set Poke Catch():** Gets an agent and checks whos the closest Pokemon to this agent (only from the pokemons that aren't being chased yet) .
+Then sets the agent List of nodes to the shortestpath to the pokemon location and now the agent will move thowards that pokemon.  
+- **NextNode():** Returns the next node the agent needs to go to get to his destination by going to the HashMap (PathMap) and look at the agent Path and every time removing the head of the list and sending him to the first node on the list (because we removing the head every time he'll always need to go to the first node on the list)
+then we set his edge by his src (the node his on right now) and his dest that we choosed from the list. we also changing the dt to reduce unnessecery calls from the server.  
+              
 
 
 # How To Run
@@ -43,12 +56,14 @@ then there are 2 option that you can run it:
 # Links:
 - [Dijkstra's Algorithm - Wikipedia](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 - [Directed_graph - Wikipedia](https://en.wikipedia.org/wiki/Directed_graph)
-- [Wiki Test Run Time](https://github.com/ortrsa/Ex1_oop/wiki/Tests-run-time)
+- [Game result - Wiki page](https://github.com/ortrsa/Ex2/wiki/result)
 - [Ex1](https://github.com/ortrsa/ex1)
+- [Arena Functions - Wiki](https://github.com/ortrsa/Ex2/wiki/Arena-Functions)
+- [Ex2 Functions - Wiki](https://github.com/ortrsa/Ex2/wiki/Ex2)
 
 # About:
 This project is part of oop course of Ariel university and made for study purposes.  
-This project made by Or Trabelsi and Nadav Epshtain, for more information please contact me, email - ortrsa@gmail.com.
+This project made by Or Trabelsi and Nadav Epstein, for more information please contact me, email - ortrsa@gmail.com.
 
 
 

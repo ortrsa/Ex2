@@ -1,5 +1,6 @@
 package api;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -94,11 +95,10 @@ class DWGraph_DSTest {
     @Test
     void getE() {
         TmpGr = GraphCreator(10);
-        Iterator<edge_data> Itr = TmpGr.getE(3).iterator();
         assertEquals(TmpGr.getE(3).size(), 3, "node with key 3 has 3 edges from him");
-        assertFalse(Itr.next().equals(TmpGr.getEdge(4, 3)), "shouldn't be the same edge because its a directed graph");
-        assertTrue(Itr.next().equals(TmpGr.getEdge(3, 6)), "should be the same edge");
-        assertTrue(Itr.next().equals(TmpGr.getEdge(3, 1)), "should be the same edge");
+        assertFalse(TmpGr.getE(3).contains(TmpGr.getEdge(4, 3)), "shouldn't be the same edge because its a directed graph");
+        assertTrue(TmpGr.getE(3).contains(TmpGr.getEdge(3, 6)), "should be the same edge");
+        assertTrue(TmpGr.getE(3).contains(TmpGr.getEdge(3, 1)), "should be the same edge");
     }
 
     @Test
@@ -155,16 +155,5 @@ class DWGraph_DSTest {
         assertEquals(209, TmpGr.edgeSize());
 
     }
-    @Test
-void Testforme(){
-        ArrayList<Integer> arr = new ArrayList<>();
-        for (int i = 0; i <5 ; i++) {
-            arr.add(i);
-        }
-        Iterator<Integer> itr = arr.iterator();
-        while(itr.hasNext()){
-            System.out.println(itr.next());
-        }
-}
 
 }
