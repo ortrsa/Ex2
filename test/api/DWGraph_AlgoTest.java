@@ -3,6 +3,7 @@ package api;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DWGraph_AlgoTest {
     public directed_weighted_graph GraphCreator(int x) {
@@ -130,20 +131,20 @@ class DWGraph_AlgoTest {
 
     }
 
-    @Test
-    void save() {
-        dw_graph_algorithms ga = new DWGraph_Algo();
-        directed_weighted_graph t = GraphCreator(10);
-        ga.init(t);
-        System.out.println(ga.getGraph());
-       System.out.println( ga.save("test.txt"));
-    }
+
 
     @Test
-    void load() {
+    void File() {
+        directed_weighted_graph G = GraphCreator(6);
         dw_graph_algorithms ga = new DWGraph_Algo();
-        ga.load("A1");
-        System.out.println(ga.getGraph());
+        dw_graph_algorithms q = new DWGraph_Algo();
+        ga.init(G);
+        ga.save("file_test.txt");
+        q.load("file_test.txt");
+        assertEquals(G.nodeSize(),q.getGraph().nodeSize(),"the graph copy should be equals to the graph source");
+        assertEquals(G.getNode(0),q.getGraph().getNode(0),"the graph copy should be equals to the graph source");
+        q.getGraph().removeNode(0);
+        assertNotEquals(G.getNode(0),q.getGraph().getNode(0),"change on the graph copy shouldn't effect on the graph source ");
 
     }
 

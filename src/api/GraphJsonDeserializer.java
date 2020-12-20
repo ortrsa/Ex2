@@ -20,10 +20,10 @@ public class GraphJsonDeserializer implements JsonDeserializer<DWGraph_DS> {
                 int NodeTag = jasonValueElement.getAsJsonObject().get("tag").getAsInt();
                 double NodeWeight = jasonValueElement.getAsJsonObject().get("Weight").getAsDouble();
                 String NodeInfo = jasonValueElement.getAsJsonObject().get("Info").getAsString();
-                double NodeX = jasonValueElement.getAsJsonObject().get("X").getAsDouble();
-                double NodeY = jasonValueElement.getAsJsonObject().get("Y").getAsDouble();
-                double NodeZ = jasonValueElement.getAsJsonObject().get("Z").getAsDouble();
-
+                JsonElement jsonValueLocation = jasonValueElement.getAsJsonObject().get("geo");
+                double NodeX = jsonValueLocation.getAsJsonObject().get("X").getAsDouble();
+                double NodeY = jsonValueLocation.getAsJsonObject().get("Y").getAsDouble();
+                double NodeZ = jsonValueLocation.getAsJsonObject().get("Z").getAsDouble();
                 node_data n = new NodeData(NodeX, NodeY, NodeZ, NodeKey, NodeInfo, NodeTag, NodeWeight);
                 g.addNode(n);
             }
