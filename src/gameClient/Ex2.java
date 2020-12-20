@@ -118,7 +118,7 @@ public class Ex2 implements Runnable {
 
             }
         } else {
-            level = Integer.parseInt(arg[1]); /// need try catch
+            level = Integer.parseInt(arg[1]);
             id = Integer.parseInt(arg[0]);
         }
 
