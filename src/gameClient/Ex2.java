@@ -124,7 +124,7 @@ public class Ex2 implements Runnable {
 
 
         game_service game = Game_Server_Ex2.getServer(level);
-        //  game.login(id);
+        game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
