@@ -17,7 +17,7 @@ public class Ex2 implements Runnable {
     private static Arena arena;
     private static int id;
     private static int level = -2;
-    private static comparator c = new comparator();
+    private static double curr_grad = 0;
     private Queue<edge_data> edgeQueue = new LinkedList<>();
     private String[] arg;
     private static long dt;
@@ -67,8 +67,7 @@ public class Ex2 implements Runnable {
         List<CL_Pokemon> Pokeda = arena.getPokemons();
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
 
-//        c.updategg(ga.getGraph());
-        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>(c);//puts Pokemons in priority queue by their value
+        PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>();
         arena.SetQueue(Pokemons);
         while (itr.hasNext()) {
             CL_Pokemon PickaTmp = itr.next();
@@ -125,9 +124,6 @@ public class Ex2 implements Runnable {
 
 
         game_service game = Game_Server_Ex2.getServer(level);
-        System.out.println(game);
-        System.out.println(game.getPokemons());
-        System.out.println(game.getAgents());
         //  game.login(id);
         init(game);
         game.startGame();
@@ -169,6 +165,8 @@ public class Ex2 implements Runnable {
      * @param edgeQ
      */
     private static void MoveAgents(game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ) {
+        MyPanel.SetTimeToEnd(game.timeToEnd());
+        MyPanel.setCurrGrade(curr_grad);
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(), g);
         arena.setAgents(AgeLst);
         Iterator<CL_Agent> Agit = AgeLst.iterator();
@@ -181,9 +179,11 @@ public class Ex2 implements Runnable {
         arena.SetTmpPokeda();
         List<CL_Pokemon> PokeList = arena.GetPokeda();
         Iterator<CL_Agent> itr = AgeLst.iterator();
+        curr_grad = 0;
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-            arena.DealWithEaten(TmpAgent);//
+            curr_grad += TmpAgent.getValue();
+            arena.DealWithEaten(TmpAgent);
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while (itr1.hasNext()) {
@@ -235,14 +235,12 @@ public class Ex2 implements Runnable {
      */
     public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g,double max) {
         arena.MoveHead(tmpAgt.getID());
-        System.out.println("this is the DT : " + dt);
-        System.out.println(tmpAgt.getSpeed());
         if (arena.getPathMap().get(tmpAgt.getID()).isEmpty()) {
             tmpAgt.setSpeed(tmpAgt.getSpeed() - 2);
             arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));
             arena.getPathMap().remove(tmpAgt.getID());
             arena.getFruitMap().remove(tmpAgt.getID());
-            arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));//
+            arena.GetBeingChased().remove(arena.getFruitMap().get(tmpAgt.getID()));
             Iterator<edge_data> itr = g.getE(tmpAgt.getSrcNode()).iterator();
             return itr.next().getDest();
         } else {
