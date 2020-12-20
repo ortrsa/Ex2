@@ -4,10 +4,10 @@
 This project is an implementation of data structures and algorithms on directional weighted graph in Java.    
 It is direct continuation of Ex1, you can find more abut Ex1 in [Here](https://github.com/ortrsa/ex1).  
 in this project we will run the "pokemon game".  
-###The game:  
+### The game:  
 the game server will place agent and pokemon with different values on directional weighted graph.  
 Every edge have different weight and affects the agent speed.
-###the goal:
+### the goal:
 the agent's will need to eat as many points as possible by eating many Pokemon's with high value.  
 The main goal of this project is to program the most effective way to get as many points as possible with few calls to server.  
 
