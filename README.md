@@ -11,7 +11,7 @@ Every edge have different weight and affects the agent speed.
 the agent's will need to eat as many points as possible by eating many Pokemon's with high value.  
 The main goal of this project is to program the most effective way to get as many points as possible with few calls to server.  
 
-This repo contains the following files: wiki page...
+This repo contains the following files: [WikiPage](https://github.com/ortrsa/Ex2/wiki/Files). 
   
     
 
@@ -57,7 +57,7 @@ then there are 2 option that you can run it:
 # Links:
 - [Dijkstra's Algorithm - Wikipedia](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)
 - [Directed_graph - Wikipedia](https://en.wikipedia.org/wiki/Directed_graph)
-- [Wiki Test Run Time](https://github.com/ortrsa/Ex1_oop/wiki/Tests-run-time)
+- [Game result - Wiki page](https://github.com/ortrsa/Ex2/wiki/result)
 - [Ex1](https://github.com/ortrsa/ex1)
 
 # About:
