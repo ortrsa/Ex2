@@ -18,7 +18,6 @@ public class Ex2 implements Runnable {
     private static int id;
     private static int level = -2;
     private static comparator c = new comparator();
-    private static int counter;
     private Queue<edge_data> edgeQueue = new LinkedList<>();
     private String[] arg;
     private static long dt;
@@ -68,7 +67,7 @@ public class Ex2 implements Runnable {
         List<CL_Pokemon> Pokeda = arena.getPokemons();
         Iterator<CL_Pokemon> itr = Pokeda.iterator();
 
-        c.updategg(ga.getGraph());
+//        c.updategg(ga.getGraph());
         PriorityQueue<CL_Pokemon> Pokemons = new PriorityQueue<>(c);//puts Pokemons in priority queue by their value
         arena.SetQueue(Pokemons);
         while (itr.hasNext()) {
@@ -89,7 +88,7 @@ public class Ex2 implements Runnable {
             if (!TmpQueue.isEmpty()) {
                 CL_Pokemon Pickachu = TmpQueue.poll();
                 edge_data PickaEdge = Pickachu.get_edge();
-                flag = game.addAgent(PickaEdge.getSrc());//Sets the agents at the src of and edge that the pokemon is on
+                flag = game.addAgent(PickaEdge.getSrc());
                 if (flag) {
                     edgeQueue.add(PickaEdge);
                 }
@@ -126,12 +125,14 @@ public class Ex2 implements Runnable {
 
 
         game_service game = Game_Server_Ex2.getServer(level);
+        System.out.println(game);
+        System.out.println(game.getPokemons());
+        System.out.println(game.getAgents());
         //  game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
         int ind = 0;
-//        long dt = 87;
         dt = 100;
         while (game.isRunning()) {
             MoveAgents(game, arena.getGraph(), edgeQueue);
@@ -170,7 +171,6 @@ public class Ex2 implements Runnable {
     private static void MoveAgents(game_service game, directed_weighted_graph g, Queue<edge_data> edgeQ) {
         List<CL_Agent> AgeLst = Arena.getAgents(game.move(), g);
         arena.setAgents(AgeLst);
-//        c.update(AgeLst);
         Iterator<CL_Agent> Agit = AgeLst.iterator();
         while (!edgeQ.isEmpty()) {
             Agit.next().SetEdge(edgeQ.poll());
@@ -183,17 +183,12 @@ public class Ex2 implements Runnable {
         Iterator<CL_Agent> itr = AgeLst.iterator();
         while (itr.hasNext()) {
             CL_Agent TmpAgent = itr.next();
-            //  arena.DealWithEaten(TmpAgent);
-            arena.DealWithEaten2(TmpAgent);//
+            arena.DealWithEaten(TmpAgent);//
         }
         Iterator<CL_Pokemon> itr1 = PokeList.iterator();
         while (itr1.hasNext()) {
             CL_Pokemon Pickchu = itr1.next();
             Arena.updateEdge(Pickchu, g);
-//            if (!arena.GetQueue().contains(Pickchu)) {
-//
-//                arena.GetQueue().add(Pickchu);
-//            }
         }
         Iterator<CL_Agent> itr2 = AgeLst.iterator();//
         while (arena.isFree() && arena.hasPoke()) {//
@@ -202,10 +197,6 @@ public class Ex2 implements Runnable {
                 arena.SetPokeCatch(Broke);//
             }
         }
-//        while (arena.isFree() && !arena.GetQueue().isEmpty()) {
-//            CL_Pokemon temp = arena.GetQueue().poll();
-//            arena.setFastest(temp);
-//        }
        double maxi = 0;
         for (CL_Agent max: AgeLst) {
             if(max.getSpeed()>maxi){
@@ -266,17 +257,6 @@ public class Ex2 implements Runnable {
             }
             else if(max<5) dt=100;
             else {dt=83;}
-//                if (arena.GetNextEdge(tmpAgt) != null && arena.GetNextEdge(tmpAgt).getWeight() < 1.2) {
-//
-//
-//                System.out.println("helooooooooooooo");
-//                dt = 80;
-//                counter = 0;
-//            } else {
-//                if(counter==2)
-//                 dt = 90;
-//                counter++;
-//            }
 
 
             return arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
