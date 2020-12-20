@@ -23,7 +23,6 @@ public class Ex2 implements Runnable {
     private static long dt;
 
 
-
     public static void main(String[] args) {
 
         Thread client = new Thread(new Ex2(args));
@@ -124,7 +123,7 @@ public class Ex2 implements Runnable {
 
 
         game_service game = Game_Server_Ex2.getServer(level);
-        //  game.login(id);
+        game.login(id);
         init(game);
         game.startGame();
         Frame.setTitle("Ex2 - OOP: (NONE trivial Solution)");
@@ -197,10 +196,10 @@ public class Ex2 implements Runnable {
                 arena.SetPokeCatch(Broke);//
             }
         }
-       double maxi = 0;
-        for (CL_Agent max: AgeLst) {
-            if(max.getSpeed()>maxi){
-                maxi=max.getSpeed();
+        double maxi = 0;
+        for (CL_Agent max : AgeLst) {
+            if (max.getSpeed() > maxi) {
+                maxi = max.getSpeed();
             }
         }
 
@@ -214,7 +213,7 @@ public class Ex2 implements Runnable {
 
             if (dest == -1) {
 
-                dest = nextNode(TmpAgt, src, g,maxi);
+                dest = nextNode(TmpAgt, src, g, maxi, game);
                 game.chooseNextEdge(TmpAgt.getID(), dest);
                 System.out.println("Agent: " + id + ", val: " + v + "   turned to node: " + dest);
             }
@@ -233,7 +232,7 @@ public class Ex2 implements Runnable {
      * @param g
      * @return
      */
-    public static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g,double max) {
+    private static int nextNode(CL_Agent tmpAgt, int src, directed_weighted_graph g, double max, game_service game) {
         arena.MoveHead(tmpAgt.getID());
         if (arena.getPathMap().get(tmpAgt.getID()).isEmpty()) {
             tmpAgt.setSpeed(tmpAgt.getSpeed() - 2);
@@ -245,16 +244,16 @@ public class Ex2 implements Runnable {
             return itr.next().getDest();
         } else {
             tmpAgt.SetEdge(g.getEdge(src, arena.getPathMap().get(tmpAgt.getID()).get(0).getKey()));
-
-            if (max < 2){
-              dt=180;
-          }
-
-            else if (max < 4) {
+            if (Integer.parseInt(game.toString().split(",")[2].split(":")[1]) > 470) {
+                dt = 115;
+            } else if (max < 2) {
+                dt = 180;
+            } else if (max < 4) {
                 dt = 120;
+            } else if (max < 5) dt = 100;
+            else {
+                dt = 85;
             }
-            else if(max<5) dt=100;
-            else {dt=83;}
 
 
             return arena.getPathMap().get(tmpAgt.getID()).get(0).getKey();
