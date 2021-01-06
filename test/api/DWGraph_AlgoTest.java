@@ -2,6 +2,9 @@ package api;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,19 +16,27 @@ class DWGraph_AlgoTest {
         for (int i = 0; i < x; i++) {
             g.addNode(new NodeData());
         }
-        g.connect(0, 1, 0);
-        g.connect(1, 2, 2);
-        g.connect(2, 7, 0.5);
-        g.connect(7, 1, 1);
-        g.connect(2, 3, 2);
-        g.connect(3, 1, 4);
-        g.connect(3, 6, 10);
-        g.connect(3, 4, 1);
-        g.connect(4, 8, 1.5);
-        g.connect(8, 6, 0);
-        g.connect(8, 9, 13);
-        g.connect(4, 5, 2);
-        g.connect(5, 0, 3);
+        g.connect(0,1,1);
+        g.connect(2,0,1);
+        g.connect(1,4,1);
+        g.connect(1,3,2);
+        g.connect(3,2,1);
+        g.connect(3,5,1);
+        g.connect(4,3,1);
+        g.connect(3,6,1);
+//        g.connect(0, 1, 0);
+//        g.connect(1, 2, 2);
+//        g.connect(2, 7, 0.5);
+//        g.connect(7, 1, 1);
+//        g.connect(2, 3, 2);
+//        g.connect(3, 1, 4);
+//        g.connect(3, 6, 10);
+//        g.connect(3, 4, 1);
+//        g.connect(4, 8, 1.5);
+//        g.connect(8, 6, 0);
+//        g.connect(8, 9, 13);
+//        g.connect(4, 5, 2);
+//        g.connect(5, 0, 3);
 
 
         return g;
@@ -147,6 +158,16 @@ class DWGraph_AlgoTest {
         assertNotEquals(G.getNode(0),q.getGraph().getNode(0),"change on the graph copy shouldn't effect on the graph source ");
 
     }
-
+    @Test
+   void connects_opponent(){
+       dw_graph_algorithms ga = new DWGraph_Algo();
+       directed_weighted_graph t = GraphCreator(7);
+       ga.init(t);
+        List<node_data> list = new ArrayList<>();
+        list =ga.connected_component(0);
+        for (node_data n :list) {
+            System.out.println(n.getKey());
+        }
+   }
 
 }
