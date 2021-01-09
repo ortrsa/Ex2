@@ -331,15 +331,15 @@ return true;
     @Override
     public List<node_data> connected_component(int key){
         Queue<node_data> Q = new LinkedList<>();
-        List<node_data> connected_to = new ArrayList<>();
-        List<node_data> connected_from = new ArrayList<>();
+        List<Integer> connected_to = new ArrayList<>();
+        List<Integer> connected_from = new ArrayList<>();
         List<node_data> res = new ArrayList<>();
         Q.add(gr.getNode(key));
         while(!Q.isEmpty()){
             for (edge_data e : gr.getE(Q.poll().getKey())) {
                 if(gr.getNode(e.getDest()).getWeight()==-1){
                     gr.getNode(e.getDest()).setWeight(0);
-                    connected_to.add(gr.getNode(e.getDest()));
+                    connected_to.add(e.getDest());
                     Q.add(gr.getNode(e.getDest()));
                 }
             }
@@ -351,15 +351,15 @@ return true;
             for (edge_data e: tmp.getE(Q.poll().getKey())) {
                 if(tmp.getNode(e.getDest()).getWeight()==-1){
                     tmp.getNode(e.getDest()).setWeight(0);
-                    connected_from.add(tmp.getNode(e.getDest()));
+                    connected_from.add(e.getDest());
                     Q.add(tmp.getNode(e.getDest()));
                 }
 
             }
         }
-        for (node_data n:connected_to) {
+        for (Integer n:connected_to) {
             if(connected_from.contains(n)){
-                res.add(n);
+                res.add(gr.getNode(n));
             }
         }
         return res;
