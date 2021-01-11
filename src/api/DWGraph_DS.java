@@ -112,12 +112,13 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public Collection<edge_data> getE(int node_id) {
-        Collection<edge_data> Neigh = new HashSet();
-        Iterator<Integer> itr = Edges.get(node_id).keySet().iterator();
-        while(itr.hasNext()){
-            Neigh.add(getEdge(node_id, itr.next()));
-        }
-        return Neigh;
+        return Edges.get(node_id).values();
+//        Collection<edge_data> Neigh = new HashSet();
+//        Iterator<Integer> itr = Edges.get(node_id).keySet().iterator();
+//        while(itr.hasNext()){
+//            Neigh.add(getEdge(node_id, itr.next()));
+//        }
+//        return Neigh;
     }
 
     /**
@@ -201,4 +202,15 @@ public class DWGraph_DS implements directed_weighted_graph {
                 '}';
     }
 
+
+    @Override
+    public Collection<edge_data> getin(int node_id) {
+        return Parents.get(node_id).values();
+//        Collection<edge_data> ine = new HashSet();
+//        Iterator<Integer> itr = Parents.get(node_id).keySet().iterator();
+//        while(itr.hasNext()){
+//            ine.add(getEdge(itr.next(),node_id));
+//        }
+//        return ine;
+    }
 }

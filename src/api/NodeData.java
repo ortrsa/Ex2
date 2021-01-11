@@ -121,10 +121,9 @@ public class NodeData implements node_data, Comparable<node_data> {
 
     @Override
     public String toString() {
-        return "NodeData{" +
-                "key=" + key +
-                ", Weight=" + Weight +
-                '}';
+        return
+                ""+ key;
+
     }
 
     /**

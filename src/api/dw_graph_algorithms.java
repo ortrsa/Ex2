@@ -19,8 +19,8 @@ public interface dw_graph_algorithms {
      * @param g
      */
     public void init(directed_weighted_graph g);
-    public List<node_data> connected_component(int key);
-    public List<List<node_data>> connected_components();
+    public List<Integer> connected_component(int key);
+    public List<List<Integer>> connected_components();
     /**
      * Return the underlying graph of which this class works.
      * @return

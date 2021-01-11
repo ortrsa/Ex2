@@ -142,6 +142,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
      * @return
      */
     public directed_weighted_graph ReversGr(){
+
         directed_weighted_graph g = new DWGraph_DS();
         Iterator<node_data> itr = gr.getV().iterator();
         while(itr.hasNext()){
@@ -173,7 +174,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         unused = new PriorityQueue<>();
         nodeDis = new HashMap<>();
 
-        Dijkstra(src);
+        Dijkstra(src, -1);
         double ShortestPath = gr.getNode(dest).getWeight();
         reset_nodes();
         return  ShortestPath;
@@ -199,7 +200,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         nodeDis = new HashMap<>();
         nodePar = new HashMap<>();
         path = new ArrayList<>();
-        Dijkstra(src);
+        Dijkstra(src,dest);
         if (gr.getNode(dest).getWeight() == -1) return path;
         node_data pointerNode = gr.getNode(dest);
         path.add(pointerNode);
@@ -287,7 +288,7 @@ return true;
      *
      * @param src
      */
-    public void Dijkstra(int src) {
+    public void Dijkstra(int src ,int dest) {
         gr.getNode(src).setWeight(0.0);
         nodeDis.put(gr.getNode(src), 0.0);
         unused.add(gr.getNode(src));
@@ -295,6 +296,12 @@ return true;
         while (!unused.isEmpty()) {
 
             node_data t = unused.poll();
+            if(t.getKey()== dest){
+                break;
+            }
+            if(used.contains(t)){
+                continue;
+            }
             used.add(t);
             Iterator<edge_data> Nei = gr.getE(t.getKey()).iterator();
             while (Nei.hasNext()) {
@@ -329,11 +336,11 @@ return true;
         }
     }
     @Override
-    public List<node_data> connected_component(int key){
+    public List<Integer> connected_component(int key){
         Queue<node_data> Q = new LinkedList<>();
-        List<Integer> connected_to = new ArrayList<>();
-        List<Integer> connected_from = new ArrayList<>();
-        List<node_data> res = new ArrayList<>();
+        HashSet<Integer> connected_to = new HashSet<>();
+        HashSet<Integer> connected_from = new HashSet<>();
+        List<Integer> res = new ArrayList<>();
         Q.add(gr.getNode(key));
         while(!Q.isEmpty()){
             for (edge_data e : gr.getE(Q.poll().getKey())) {
@@ -345,39 +352,42 @@ return true;
             }
         }
         reset_nodes();
-        directed_weighted_graph tmp = ReversGr();
-        Q.add(tmp.getNode(key));
+        Q.add(gr.getNode(key));
         while(!Q.isEmpty()){
-            for (edge_data e: tmp.getE(Q.poll().getKey())) {
-                if(tmp.getNode(e.getDest()).getWeight()==-1){
-                    tmp.getNode(e.getDest()).setWeight(0);
-                    connected_from.add(e.getDest());
-                    Q.add(tmp.getNode(e.getDest()));
+            for (edge_data e: gr.getin(Q.poll().getKey())) {
+                if(gr.getNode(e.getSrc()).getWeight()==-1){
+                    gr.getNode(e.getSrc()).setWeight(0);
+                    connected_from.add(e.getSrc());
+                    Q.add(gr.getNode(e.getSrc()));
                 }
 
             }
         }
-        for (Integer n:connected_to) {
-            if(connected_from.contains(n)){
-                res.add(gr.getNode(n));
-            }
+        connected_from.retainAll(connected_to);
+        res.addAll(connected_from);
+
+        reset_nodes();
+
+        if(!res.contains(key)){
+            res.add(key);
         }
         return res;
     }
     @Override
-    public List<List<node_data>> connected_components(){
+    public List<List<Integer>> connected_components(){
 
-List<List<node_data>> res = new ArrayList<>();
+List<List<Integer>> res = new ArrayList<>();
 List<node_data> tmp = new ArrayList<>();
-        List<node_data> tmp1 = new ArrayList<>();
+        List<Integer> tmp1 = new ArrayList<>();
         for (node_data n :gr.getV()) {
             tmp.add(n);
         }
         while(!tmp.isEmpty()){
             tmp1 = connected_component(tmp.get(0).getKey());
             res.add(tmp1);
-            for (node_data n :tmp1) {
-                tmp.remove(n);
+            for (Integer n :tmp1) {
+//                tmp.removeAll(tmp1);
+                tmp.remove(gr.getNode(n));
             }
         }
         return res;

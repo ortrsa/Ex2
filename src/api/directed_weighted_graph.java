@@ -85,4 +85,7 @@ public interface directed_weighted_graph {
  * @return
  */
 	public int getMC();
+
+	public Collection<edge_data> getin(int node_id);
 }
+

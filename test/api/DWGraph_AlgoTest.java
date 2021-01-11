@@ -158,16 +158,16 @@ class DWGraph_AlgoTest {
         assertNotEquals(G.getNode(0),q.getGraph().getNode(0),"change on the graph copy shouldn't effect on the graph source ");
 
     }
-    @Test
-   void connects_opponent(){
-       dw_graph_algorithms ga = new DWGraph_Algo();
-       directed_weighted_graph t = GraphCreator(7);
-       ga.init(t);
-        List<node_data> list = new ArrayList<>();
-        list =ga.connected_component(0);
-        for (node_data n :list) {
-            System.out.println(n.getKey());
-        }
-   }
+//    @Test
+//   void connects_opponent(){
+//       dw_graph_algorithms ga = new DWGraph_Algo();
+//       directed_weighted_graph t = GraphCreator(7);
+//       ga.init(t);
+//        List<node_data> list = new ArrayList<>();
+//        list =ga.connected_component(0);
+//        for (node_data n :list) {
+//            System.out.println(n.getKey());
+//        }
+//   }
 
 }
